@@ -1,0 +1,5 @@
+= MotionBundler CHANGELOG
+
+== Version 0.1.0 (April xx, 2013)
+
+* Initial release
