@@ -10,7 +10,7 @@ module MotionBundler
       end
 
       def start
-        log
+        log.clear
       end
 
       def stop

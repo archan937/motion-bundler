@@ -13,8 +13,15 @@ module Unit
           end
 
           it "should create a log instance" do
-            assert_equal Thread.current[:motion_bundler_log].class, MotionBundler::Require::Tracer::Log
-            assert_equal Thread.current[:motion_bundler_log], MotionBundler::Require::Tracer.log
+            assert_equal MotionBundler::Require::Tracer::Log, Thread.current[:motion_bundler_log].class
+            assert_equal MotionBundler::Require::Tracer .log, Thread.current[:motion_bundler_log]
+          end
+
+          describe "having the log instance already defined" do
+            it "should clear the log instance" do
+              MotionBundler::Require::Tracer.log.expects(:clear)
+              MotionBundler::Require::Tracer.start
+            end
           end
         end
 
