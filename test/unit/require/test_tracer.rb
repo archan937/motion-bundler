@@ -23,6 +23,27 @@ module Unit
               MotionBundler::Require::Tracer.start
             end
           end
+
+          it "should hook into `Kernel#require` and `Object#require`" do
+            assert_equal true, Kernel.respond_to?(:require_with_hook)
+            assert_equal true, Object.respond_to?(:require_with_hook)
+          end
+        end
+
+        describe "when calling `stop`" do
+          before do
+            MotionBundler::Require::Tracer.start
+          end
+
+          it "should unhook from `Kernel#require` and `Object#require`" do
+            assert_equal true, Kernel.respond_to?(:require_with_hook)
+            assert_equal true, Object.respond_to?(:require_with_hook)
+
+            MotionBundler::Require::Tracer.stop
+
+            assert_equal false, Kernel.respond_to?(:require_with_hook)
+            assert_equal false, Object.respond_to?(:require_with_hook)
+          end
         end
 
       end
