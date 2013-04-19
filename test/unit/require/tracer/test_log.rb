@@ -19,21 +19,24 @@ module Unit
           it "should register dependencies as expected" do
             loaded_features = %w(foo1 foo2 foo3)
             @log.expects(:loaded_features).at_least_once.returns loaded_features
-            @log.instance_variable_set :@log, {"file1" => ["file0"]}
+            @log.instance_variable_set :@log, {"/Sources/lib/file1.rb" => ["file0"]}
 
-            @log.register "file1" do
+            @log.register "/Sources/lib/file1.rb:129" do
               loaded_features << "file2"
-              @log.register "file2" do
+              @log.register "/Sources/lib/file2.rb:1" do
                 loaded_features << "file3"
-                @log.register "file2" do
+                @log.register "/Sources/lib/file2.rb:2" do
                   loaded_features << "file4"
+                end
+                @log.register "/Sources/lib/file2" do
+                  loaded_features << "file5"
                 end
               end
             end
 
             assert_equal({
-              "file1" => %w(file0 file2),
-              "file2" => %w(file3 file4)
+              "/Sources/lib/file1.rb" => %w(file0 file2),
+              "/Sources/lib/file2.rb" => %w(file3 file4)
             }, @log.instance_variable_get(:@log))
           end
         end

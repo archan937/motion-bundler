@@ -11,8 +11,10 @@ module MotionBundler
           @log.clear
         end
 
-        def register(caller)
-          dependencies = (@log[caller] ||= [])
+        def register(file)
+          return unless file.match(/^(.*\.rb)\b/)
+
+          dependencies = (@log[$1] ||= [])
           dindex = dependencies.size
           findex = loaded_features.size
 
