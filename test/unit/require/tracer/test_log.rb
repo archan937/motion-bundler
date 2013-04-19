@@ -26,9 +26,6 @@ module Unit
                 @log.register "/Sources/lib/file2.rb:2" do
                   loaded_features << "file4"
                 end
-                @log.register "/Sources/lib/file2" do
-                  loaded_features << "file5"
-                end
                 loaded_features << "file3"
               end
               loaded_features << "file2"
