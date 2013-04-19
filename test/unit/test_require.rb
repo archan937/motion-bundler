@@ -5,9 +5,15 @@ module Unit
 
     describe MotionBundler do
       it "should be able to trace requirements within a block" do
-        MotionBundler::Require::Tracer.expects(:start)
-        MotionBundler::Require::Tracer.expects(:stop)
-        MotionBundler::Require.trace {}
+        object = mock "object"
+        object.expects :do_something
+
+        MotionBundler::Require::Tracer.expects :start
+        MotionBundler::Require::Tracer.expects :stop
+
+        MotionBundler::Require.trace do
+          object.do_something
+        end
       end
     end
 
