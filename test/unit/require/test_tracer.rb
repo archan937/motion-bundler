@@ -6,7 +6,7 @@ module Unit
 
       describe MotionBundler::Require::Tracer do
 
-        describe "when calling `start`" do
+        describe "calling `start`" do
           before do
             Thread.current[:motion_bundler_log] = nil
             MotionBundler::Require::Tracer.start
@@ -30,7 +30,7 @@ module Unit
           end
         end
 
-        describe "when calling `stop`" do
+        describe "calling `stop`" do
           before do
             MotionBundler::Require::Tracer.start
           end
@@ -43,6 +43,33 @@ module Unit
 
             assert_equal false, Kernel.respond_to?(:require_with_hook)
             assert_equal false, Object.respond_to?(:require_with_hook)
+          end
+        end
+
+        describe "tracing require statements" do
+          it "should log dependencies as expected" do
+            assert_equal({}, MotionBundler::Require::Tracer.log.instance_variable_get(:@log))
+
+            MotionBundler::Require::Tracer.start
+            require "a"
+            require "b"
+            require "c"
+            MotionBundler::Require::Tracer.stop
+
+            assert_equal({
+              __FILE__ => [
+                File.expand_path("../../../sources/a.rb", __FILE__),
+                File.expand_path("../../../sources/b.rb", __FILE__),
+                File.expand_path("../../../sources/c.rb", __FILE__)
+              ],
+              File  .expand_path("../../../sources/b.rb"  , __FILE__) => [
+                File.expand_path("../../../sources/b/a.rb", __FILE__),
+                File.expand_path("../../../sources/b/b.rb", __FILE__)
+              ],
+              File  .expand_path("../../../sources/b/a.rb"  , __FILE__) => [
+                File.expand_path("../../../sources/b/a/a.rb", __FILE__)
+              ]
+            }, MotionBundler::Require::Tracer.log.instance_variable_get(:@log))
           end
         end
 

@@ -15,12 +15,11 @@ module MotionBundler
           return unless file.match(/^(.*\.rb)\b/)
 
           dependencies = (@log[$1] ||= [])
-          dindex = dependencies.size
-          findex = loaded_features.size
+          index = dependencies.size
 
           yield
 
-          dependencies.insert dindex, loaded_features[findex]
+          dependencies.insert index, loaded_features.last
           true
         end
 

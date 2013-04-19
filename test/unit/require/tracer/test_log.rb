@@ -22,16 +22,16 @@ module Unit
             @log.instance_variable_set :@log, {"/Sources/lib/file1.rb" => ["file0"]}
 
             @log.register "/Sources/lib/file1.rb:129" do
-              loaded_features << "file2"
               @log.register "/Sources/lib/file2.rb:1" do
-                loaded_features << "file3"
                 @log.register "/Sources/lib/file2.rb:2" do
                   loaded_features << "file4"
                 end
                 @log.register "/Sources/lib/file2" do
                   loaded_features << "file5"
                 end
+                loaded_features << "file3"
               end
+              loaded_features << "file2"
             end
 
             assert_equal({

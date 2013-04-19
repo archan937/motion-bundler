@@ -33,7 +33,11 @@ module MotionBundler
       def require_hook
         @require_hook ||= proc do
           def require_with_hook(path)
-            require_without_hook path
+            result = nil
+            MotionBundler::Require::Tracer.log.register caller[0] do
+              result = require_without_hook path
+            end
+            result
           end
           alias :require_without_hook :require
           alias :require :require_with_hook
