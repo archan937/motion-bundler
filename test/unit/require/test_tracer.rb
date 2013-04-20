@@ -58,16 +58,16 @@ module Unit
 
             assert_equal({
               __FILE__ => [
-                File.expand_path("../../../sources/a.rb", __FILE__),
-                File.expand_path("../../../sources/b.rb", __FILE__),
-                File.expand_path("../../../sources/c.rb", __FILE__)
+                File.expand_path("../../../lib/a.rb", __FILE__),
+                File.expand_path("../../../lib/b.rb", __FILE__),
+                File.expand_path("../../../lib/c.rb", __FILE__)
               ],
-              File  .expand_path("../../../sources/b.rb"  , __FILE__) => [
-                File.expand_path("../../../sources/b/a.rb", __FILE__),
-                File.expand_path("../../../sources/b/b.rb", __FILE__)
+              File  .expand_path("../../../lib/b.rb"  , __FILE__) => [
+                File.expand_path("../../../lib/b/a.rb", __FILE__),
+                File.expand_path("../../../lib/b/b.rb", __FILE__)
               ],
-              File  .expand_path("../../../sources/b/a.rb"  , __FILE__) => [
-                File.expand_path("../../../sources/b/a/a.rb", __FILE__)
+              File  .expand_path("../../../lib/b/a.rb"  , __FILE__) => [
+                File.expand_path("../../../lib/b/a/a.rb", __FILE__)
               ]
             }, MotionBundler::Require::Tracer.log.instance_variable_get(:@log))
           end
