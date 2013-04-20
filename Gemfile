@@ -2,4 +2,10 @@ source "https://rubygems.org"
 
 gemspec
 
-gem "simplecov", :require => false, :group => :test
+group :test do
+  gem "simplecov", :require => false
+end
+
+group :console do
+  gem "pry"
+end
