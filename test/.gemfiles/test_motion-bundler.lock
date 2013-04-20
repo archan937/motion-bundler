@@ -1,0 +1,10 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    slot_machine (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  slot_machine

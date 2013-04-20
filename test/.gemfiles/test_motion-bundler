@@ -1,0 +1,5 @@
+source "https://rubygems.org"
+
+group :motion do
+  gem "slot_machine"
+end
