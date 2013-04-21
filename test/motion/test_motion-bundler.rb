@@ -14,7 +14,7 @@ module Motion
         assert_raises NameError do
           SlotMachine
         end
-        Bundler.require :motion
+        MotionBundler.setup
         assert SlotMachine
       end
     end
