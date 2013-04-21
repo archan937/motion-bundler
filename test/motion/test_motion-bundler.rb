@@ -6,7 +6,7 @@ group :motion do
 end
 G
 
-module Unit
+module Motion
   class TestMotionBundler < MiniTest::Unit::TestCase
 
     describe MotionBundler do

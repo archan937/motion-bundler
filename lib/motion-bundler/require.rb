@@ -6,7 +6,7 @@ module MotionBundler
 
     def trace
       Tracer.start
-      yield
+      yield if block_given?
       Tracer.stop
     end
 
