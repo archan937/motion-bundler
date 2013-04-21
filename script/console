@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require "bundler"
-Bundler.require :console
+Bundler.require :default, :console
 $:.unshift File.expand_path("../../test/lib", __FILE__)
 
 puts "Loading MotionBundler development environment (#{MotionBundler::VERSION})"
