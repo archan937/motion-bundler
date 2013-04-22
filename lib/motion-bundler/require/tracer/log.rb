@@ -23,6 +23,14 @@ module MotionBundler
           true
         end
 
+        def files
+          (@log.keys + @log.values).flatten.sort.uniq
+        end
+
+        def files_dependencies
+          @log.dup
+        end
+
       private
 
         def loaded_features

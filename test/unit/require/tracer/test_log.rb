@@ -36,6 +36,21 @@ module Unit
               "/Sources/lib/file2.rb" => %w(file3 file4)
             }, @log.instance_variable_get(:@log))
           end
+
+          it "should return files and files_dependencies as expected" do
+            @log.instance_variable_set :@log, {
+              "/Sources/lib/file1.rb" => %w(file0 file2),
+              "/Sources/lib/file2.rb" => %w(file3 file4)
+            }
+
+            assert_equal %w(/Sources/lib/file1.rb /Sources/lib/file2.rb file0 file2 file3 file4), @log.files
+            assert_equal({
+              "/Sources/lib/file1.rb" => %w(file0 file2),
+              "/Sources/lib/file2.rb" => %w(file3 file4)
+            }, @log.files_dependencies)
+
+            assert_equal true, @log.files_dependencies.object_id != @log.instance_variable_get(:@log).object_id
+          end
         end
 
       end
