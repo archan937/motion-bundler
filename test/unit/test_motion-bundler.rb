@@ -15,6 +15,8 @@ module Unit
         end
 
         MotionBundler::Require.expects :trace
+        Motion::Project::App.any_instance.expects :files=
+        Motion::Project::App.any_instance.expects :files_dependencies
         MotionBundler.setup
       end
     end

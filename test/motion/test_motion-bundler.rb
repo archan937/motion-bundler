@@ -14,6 +14,9 @@ module Motion
         assert_raises NameError do
           SlotMachine
         end
+        Motion::Project::App.any_instance.expects(:files).returns %w(/Users/paulengel/foo.rb /Users/paulengel/bar.rb)
+        Motion::Project::App.any_instance.expects(:files=).with %w(/Users/paulengel/foo.rb /Users/paulengel/bar.rb)
+        Motion::Project::App.any_instance.expects(:files_dependencies).with Hash.new
         MotionBundler.setup
         assert SlotMachine
       end

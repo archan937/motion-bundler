@@ -13,6 +13,24 @@ require "minitest/autorun"
 require "mocha/setup"
 require "motion-bundler"
 
+module Motion
+  module Project
+    class App
+      def self.setup
+        yield new
+      end
+      def files
+        @files ||= []
+      end
+      def files=(files)
+        @files = files
+      end
+      def files_dependencies(deps)
+      end
+    end
+  end
+end
+
 def motion_gemfile(content)
   content = "source \"https://rubygems.org\"\n\n#{content}"
   dirname = File.dirname __FILE__
@@ -36,4 +54,5 @@ def motion_gemfile(content)
 
   ENV["BUNDLE_GEMFILE"] = gemfile
   require "bundler"
+  Bundler.setup
 end
