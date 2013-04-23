@@ -1,5 +1,5 @@
 source "https://rubygems.org"
 
 group :motion do
-  gem "slot_machine"
+  gem "slot_machine", :path => "/Users/paulengel/Sources/motion-bundler/test/gems/slot_machine"
 end

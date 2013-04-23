@@ -1,10 +1,14 @@
+PATH
+  remote: /Users/paulengel/Sources/motion-bundler/test/gems/slot_machine
+  specs:
+    slot_machine (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    slot_machine (0.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  slot_machine
+  slot_machine!

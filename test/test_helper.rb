@@ -56,3 +56,7 @@ def motion_gemfile(content)
   require "bundler"
   Bundler.setup
 end
+
+def gem_path(name)
+  File.expand_path "../gems/#{name}", __FILE__
+end

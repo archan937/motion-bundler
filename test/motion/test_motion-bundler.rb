@@ -2,7 +2,7 @@ require File.expand_path("../../test_helper", __FILE__)
 
 motion_gemfile <<-G
 group :motion do
-  gem "slot_machine"
+  gem "slot_machine", :path => "#{gem_path "slot_machine"}"
 end
 G
 
