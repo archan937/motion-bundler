@@ -21,17 +21,21 @@ module Unit
             @log.expects(:loaded_features).at_least_once.returns loaded_features
             @log.instance_variable_set :@log, {"/Sources/lib/file1.rb" => ["file0"]}
 
-            @log.register "/Sources/lib/file1.rb:129" do
-              @log.register "/Sources/lib/file2.rb:1" do
-                @log.register "/Sources/lib/file2.rb:2" do
-                  loaded_features << "file4"
+            @log.register "/.rvm/gems/bundler/bundler.rb:63" do
+              @log.register "/Sources/lib/file1.rb:129" do
+                @log.register "/Sources/lib/file2.rb:1" do
+                  @log.register "/Sources/lib/file2.rb:2" do
+                    loaded_features << "file4"
+                  end
+                  loaded_features << "file3"
                 end
-                loaded_features << "file3"
+                loaded_features << "file2"
               end
-              loaded_features << "file2"
+              loaded_features << "file1"
             end
 
             assert_equal({
+              "BUNDLER" => %w(file1),
               "/Sources/lib/file1.rb" => %w(file0 file2),
               "/Sources/lib/file2.rb" => %w(file3 file4)
             }, @log.instance_variable_get(:@log))

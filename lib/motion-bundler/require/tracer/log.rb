@@ -14,7 +14,8 @@ module MotionBundler
         def register(file)
           return unless file.match(/^(.*\.rb)\b/)
 
-          dependencies = (@log[$1] ||= [])
+          file = $1.include?("/bundler/") ? "BUNDLER" : $1
+          dependencies = (@log[file] ||= [])
           index = dependencies.size
 
           yield if block_given?
@@ -24,7 +25,7 @@ module MotionBundler
         end
 
         def files
-          (@log.keys + @log.values).flatten.sort.uniq
+          (@log.keys + @log.values).flatten.sort.uniq - ["BUNDLER"]
         end
 
         def files_dependencies
