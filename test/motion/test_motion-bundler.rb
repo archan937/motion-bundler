@@ -18,8 +18,6 @@ module Motion
         files = %w(/Users/paulengel/foo.rb /Users/paulengel/bar.rb)
         Motion::Project::App.any_instance.expects(:files).returns files
         Motion::Project::App.any_instance.expects(:files=).with([
-          "/Users/paulengel/foo.rb",
-          "/Users/paulengel/bar.rb",
           gem_path("slot_machine/lib/slot.rb"),
           gem_path("slot_machine/lib/slot_machine.rb"),
           gem_path("slot_machine/lib/slot_machine/slot.rb"),
@@ -27,7 +25,9 @@ module Motion
           gem_path("slot_machine/lib/slot_machine/version.rb"),
           gem_path("slot_machine/lib/slots.rb"),
           gem_path("slot_machine/lib/time_slot.rb"),
-          gem_path("slot_machine/lib/time_slots.rb")
+          gem_path("slot_machine/lib/time_slots.rb"),
+          "/Users/paulengel/foo.rb",
+          "/Users/paulengel/bar.rb"
         ])
         Motion::Project::App.any_instance.expects(:files_dependencies).with(
           gem_path("slot_machine/lib/slot_machine.rb") => [
