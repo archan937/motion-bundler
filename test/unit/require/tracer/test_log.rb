@@ -43,12 +43,14 @@ module Unit
 
           it "should return files and files_dependencies as expected" do
             @log.instance_variable_set :@log, {
+              "BUNDLER" => %w(file1),
               "/Sources/lib/file1.rb" => %w(file0 file2),
               "/Sources/lib/file2.rb" => %w(file3 file4)
             }
 
-            assert_equal %w(/Sources/lib/file1.rb /Sources/lib/file2.rb file0 file2 file3 file4), @log.files
+            assert_equal %w(/Sources/lib/file1.rb /Sources/lib/file2.rb BUNDLER file0 file1 file2 file3 file4), @log.files
             assert_equal({
+              "BUNDLER" => %w(file1),
               "/Sources/lib/file1.rb" => %w(file0 file2),
               "/Sources/lib/file2.rb" => %w(file3 file4)
             }, @log.files_dependencies)

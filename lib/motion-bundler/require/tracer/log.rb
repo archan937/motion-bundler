@@ -25,7 +25,7 @@ module MotionBundler
         end
 
         def files
-          (@log.keys + @log.values).flatten.sort.uniq - ["BUNDLER"]
+          (@log.keys + @log.values).flatten.sort.uniq
         end
 
         def files_dependencies
