@@ -34,6 +34,10 @@ module Motion
   end
 end
 
+def lib_file(path)
+  File.expand_path "../../lib/#{path}", __FILE__
+end
+
 def motion_gemfile(content)
   content = "source \"https://rubygems.org\"\n\n#{content}"
   dirname = File.dirname __FILE__
