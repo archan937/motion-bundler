@@ -1,11 +1,8 @@
 $:.unshift File.expand_path("../lib", __FILE__)
 $:.unshift File.expand_path("../../lib", __FILE__)
 
-if Dir.pwd == File.expand_path("../..", __FILE__)
-  require "simplecov"
-  SimpleCov.coverage_dir "test/coverage"
-  SimpleCov.start
-end
+require_relative "test_helper/coverage"
+require_relative "test_helper/motion"
 
 require "fileutils"
 require "minitest/unit"
@@ -13,29 +10,12 @@ require "minitest/autorun"
 require "mocha/setup"
 require "motion-bundler"
 
-module Motion
-  module Project
-    class App
-      def self.setup
-        yield new
-      end
-      def self.fail(msg)
-        raise msg
-      end
-      def files
-        @files ||= []
-      end
-      def files=(files)
-        @files = files
-      end
-      def files_dependencies(deps)
-      end
-    end
-  end
-end
-
 def lib_file(path)
   File.expand_path "../../lib/#{path}", __FILE__
+end
+
+def gem_path(name)
+  File.expand_path "../gems/#{name}", __FILE__
 end
 
 def motion_gemfile(content)
@@ -62,8 +42,4 @@ def motion_gemfile(content)
   ENV["BUNDLE_GEMFILE"] = gemfile
   require "bundler"
   Bundler.setup
-end
-
-def gem_path(name)
-  File.expand_path "../gems/#{name}", __FILE__
 end
