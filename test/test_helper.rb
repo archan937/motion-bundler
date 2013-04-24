@@ -19,6 +19,9 @@ module Motion
       def self.setup
         yield new
       end
+      def self.fail(msg)
+        raise msg
+      end
       def files
         @files ||= []
       end
