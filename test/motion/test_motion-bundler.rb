@@ -18,6 +18,7 @@ module Motion
         files = %w(/Users/paulengel/foo.rb /Users/paulengel/bar.rb)
         Motion::Project::App.any_instance.expects(:files).returns files
         Motion::Project::App.any_instance.expects(:files=).with([
+          lib_file("motion-bundler/simulator/core_ext.rb"),
           gem_path("slot_machine/lib/slot.rb"),
           gem_path("slot_machine/lib/slot_machine.rb"),
           gem_path("slot_machine/lib/slot_machine/slot.rb"),
@@ -31,6 +32,7 @@ module Motion
         ])
         Motion::Project::App.any_instance.expects(:files_dependencies).with(
           gem_path("slot_machine/lib/slot_machine.rb") => [
+            lib_file("motion-bundler/simulator/core_ext.rb"),
             gem_path("slot_machine/lib/slot_machine/version.rb"),
             gem_path("slot_machine/lib/slot_machine/slot.rb"),
             gem_path("slot_machine/lib/slot_machine/slots.rb"),

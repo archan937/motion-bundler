@@ -11,8 +11,8 @@ module MotionBundler
       yield if block_given?
     end
     Motion::Project::App.setup do |app|
-      app.files = Require::Tracer.log.files + app.files - ["BUNDLER"]
-      app.files_dependencies Require::Tracer.log.files_dependencies.tap{|x| x.delete "BUNDLER"}
+      app.files = Require.files + app.files
+      app.files_dependencies Require.files_dependencies
     end
   end
 

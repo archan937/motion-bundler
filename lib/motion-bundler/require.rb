@@ -14,5 +14,18 @@ module MotionBundler
       Tracer.stop
     end
 
+    def files
+      default_files + Tracer.log.files - ["BUNDLER"]
+    end
+
+    def files_dependencies
+      Require::Tracer.log.files_dependencies.tap do |dependencies|
+        (dependencies.delete("BUNDLER") || []).each do |file|
+          dependencies[file] ||= []
+          dependencies[file] = default_files + dependencies[file]
+        end
+      end
+    end
+
   end
 end
