@@ -15,6 +15,13 @@ module Unit
           object.do_something
         end
       end
+
+      it "should determine RubyMotion app 'default files'" do
+        MotionBundler.expects(:simulator?).returns(true)
+        assert_equal [File.expand_path("../../../lib/motion-bundler/simulator/core_ext.rb", __FILE__)], MotionBundler::Require.default_files
+        MotionBundler.expects(:simulator?).returns(false)
+        assert_equal [File.expand_path("../../../lib/motion-bundler/device/core_ext.rb", __FILE__)], MotionBundler::Require.default_files
+      end
     end
 
   end
