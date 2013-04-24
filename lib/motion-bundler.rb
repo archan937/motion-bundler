@@ -16,4 +16,18 @@ module MotionBundler
     end
   end
 
+  def simulator?
+    !device?
+  end
+
+  def device?
+    argv.include? "device"
+  end
+
+private
+
+  def argv
+    ARGV
+  end
+
 end
