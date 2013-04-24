@@ -37,22 +37,20 @@ You need to setup your `Gemfile` by separating RubyMotion aware Ruby gems from t
 Add `MotionBundler.setup` at the end of your `Rakefile`:
 
     # -*- coding: utf-8 -*-
-
-    # Use `rake config' to see complete project settings.
     $:.unshift "/Library/RubyMotion/lib"
-
     require "motion/project"
+
     require "bundler"
     Bundler.require
 
     Motion::Project::App.setup do |app|
-      app.name = "MyMotionApp"
-      app.frameworks << "AVFoundation"
+      # Use `rake config' to see complete project settings.
+      app.name = "sample_app"
     end
 
     MotionBundler.setup
 
-Run `bundle install` if you haven't already and then `rake` to run the application in your iOS-simulator. Voila! You're done ^^
+Run `bundle` if you haven't already and then `rake` to run the application in your iOS-simulator. Voila! You're done ^^
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
