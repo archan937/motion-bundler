@@ -1,3 +1,4 @@
+require "motion-bundler/core_ext"
 require "motion-bundler/gem_ext"
 require "motion-bundler/require"
 require "motion-bundler/version"
