@@ -4,22 +4,15 @@ Use Ruby gems and mock require statements within RubyMotion applications
 
 ## Introduction
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+[RubyMotion](http://www.rubymotion.com) has united two great programming communities: the Ruby and iOS community. We are no longer forced to develop native iOS applications (for iPhone and iPad) using Objective-C and XCode anymore because we can choose using Ruby with any kind of text editor. Ruby gives us a lot of benefits like the beauty and flexibility of the language. Also, the Ruby community is driven by its enormous amount of open source libraries which are packed as so called "Ruby gems". Bundler is the Ruby standard for managing all the gem dependencies used within a Ruby project.
 
+There are limitations though as you cannot use any random Ruby gem you want to. It either has to be RubyMotion aware (like [BubbleWrap](https://github.com/rubymotion/BubbleWrap)) or RubyMotion compatible (mostly when having as minimal gem dependencies as possible and not doing fancy Ruby stuff like code evaluation). Also, you cannot just require Ruby sources at runtime. You will have to specify them along with their mutual dependencies.
 
-## Installation
-
-### Add MotionBundler to your Gemfile
-
-    gem "motion-bundler"
-
-### Install the gem dependencies
-
-    $ bundle
+This can give us a lot of headaches and so I have created a Ruby gem called `MotionBundler`. It will unobtrusively track and specify the required Ruby sources and their mutual dependencies of Ruby gems you want to use in your RubyMotion application.
 
 ## Usage
 
-### Set up your `Gemfile` and `Rakefile`
+### Set up your Gemfile and Rakefile
 
 You need to setup your `Gemfile` by separating RubyMotion aware Ruby gems from the ones that are not. Put the RubyMotion **unaware** gems in the `:motion` Bundler group like this:
 
@@ -27,7 +20,6 @@ You need to setup your `Gemfile` by separating RubyMotion aware Ruby gems from t
 
     # RubyMotion aware gems
     gem "motion-bundler"
-    gem "easy-button"
 
     # RubyMotion unaware gems
     group :motion do
@@ -45,14 +37,17 @@ Add `MotionBundler.setup` at the end of your `Rakefile`:
 
     Motion::Project::App.setup do |app|
       # Use `rake config' to see complete project settings.
-      app.name = "sample_app"
+      app.name = "SampleApp"
     end
 
+    # Track and specify files and their mutual dependencies within the :motion Bundler group
     MotionBundler.setup
 
-Run `bundle` if you haven't already and then `rake` to run the application in your iOS-simulator. Voila! You're done ^^
+Run `bundle` and then `rake` to run the application in your iOS-simulator. Voila! You're done ^^
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+## More documentation
+
+Please consult the [GitHub repository Wiki pages](https://github.com/archan937/motion-bundler/wiki) for further information about MotionBundler.
 
 ## Contact me
 
