@@ -6,9 +6,15 @@ module MotionBundler
   extend self
 
   def setup
-    Require.trace do
+    trace_require do
       Bundler.require :motion
       yield if block_given?
+    end
+  end
+
+  def trace_require
+    Require.trace do
+      yield
     end
     Motion::Project::App.setup do |app|
       app.files = Require.files + app.files

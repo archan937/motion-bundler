@@ -17,12 +17,24 @@ module Unit
         assert_equal true, MotionBundler.device?
       end
 
-      it "should require, trace and register files and files dependencies during setup" do
+      it "should require the :motion Bundler group and trace when invoking setup" do
         object = mock "object"
         object.expects :do_something
 
         Bundler.expects(:require).with(:motion)
         MotionBundler.setup do
+          object.do_something
+        end
+
+        MotionBundler.expects(:trace_require)
+        MotionBundler.setup
+      end
+
+      it "should require, trace and register files and files dependencies" do
+        object = mock "object"
+        object.expects :do_something
+
+        MotionBundler.trace_require do
           object.do_something
         end
 
