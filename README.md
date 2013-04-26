@@ -1,4 +1,4 @@
-# MotionBundler
+# MotionBundler [![Build Status](https://secure.travis-ci.org/archan937/motion-bundler.png)](http://travis-ci.org/archan937/motion-bundler)
 
 Use Ruby gems and mock require statements within RubyMotion applications
 
