@@ -18,7 +18,7 @@ module MotionBundler
           dependencies = (@log[file] ||= [])
           index = dependencies.size
 
-          yield if block_given?
+          yield
 
           dependencies.insert index, loaded_features.last
           true
