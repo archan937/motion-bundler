@@ -27,6 +27,9 @@ module Unit
           it "should hook into `Kernel#require` and `Object#require`" do
             assert_equal true, Kernel.respond_to?(:require_with_hook)
             assert_equal true, Object.respond_to?(:require_with_hook)
+
+            MotionBundler::Require::Tracer::Hooks.expects :hook
+            MotionBundler::Require::Tracer.start
           end
         end
 
@@ -43,6 +46,9 @@ module Unit
 
             assert_equal false, Kernel.respond_to?(:require_with_hook)
             assert_equal false, Object.respond_to?(:require_with_hook)
+
+            MotionBundler::Require::Tracer::Hooks.expects :unhook
+            MotionBundler::Require::Tracer.stop
           end
         end
 
