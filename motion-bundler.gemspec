@@ -20,5 +20,4 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rake"
 
   gem.add_dependency "colorize"
-  gem.add_dependency "motion.h"
 end
