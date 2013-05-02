@@ -4,8 +4,8 @@ require File.expand_path("../lib/motion-bundler/version", __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Paul Engel"]
   gem.email         = ["paul.engel@holder.nl"]
-  gem.summary       = %q{Use Ruby gems and mock require statements within RubyMotion applications}
-  gem.description   = %q{Use Ruby gems and mock require statements within RubyMotion applications}
+  gem.summary       = %q{Use Ruby gems and require statements within RubyMotion applications}
+  gem.description   = %q{Use Ruby gems and require statements within RubyMotion applications}
   gem.homepage      = "https://github.com/archan937/motion-bundler"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

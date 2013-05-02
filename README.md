@@ -1,6 +1,6 @@
 # MotionBundler [![Build Status](https://secure.travis-ci.org/archan937/motion-bundler.png)](http://travis-ci.org/archan937/motion-bundler)
 
-Use Ruby gems and mock require statements within RubyMotion applications
+Use Ruby gems and require statements within RubyMotion applications
 
 ## Introduction
 
@@ -32,6 +32,7 @@ Add `MotionBundler.setup` at the end of your `Rakefile`:
     $:.unshift "/Library/RubyMotion/lib"
     require "motion/project"
 
+    # Require and prepare Bundler
     require "bundler"
     Bundler.require
 
@@ -57,6 +58,10 @@ Yes, I did. But MotionBundler ...
 ## More documentation
 
 Please consult the [GitHub repository Wiki pages](https://github.com/archan937/motion-bundler/wiki) for further information about MotionBundler.
+
+## Roadmap
+
+* Mock requiring "simple" Ruby standard library sources
 
 ## Contact me
 
