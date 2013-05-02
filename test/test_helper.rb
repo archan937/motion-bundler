@@ -43,21 +43,3 @@ def motion_gemfile(content)
   require "bundler"
   Bundler.setup
 end
-
-def taintable_core
-  Kernel.instance_eval do
-    alias :original_require :require
-  end
-  Object.class_eval do
-    alias :original_require :require
-  end
-  yield
-  Kernel.instance_eval do
-    alias :require :original_require
-    undef :original_require
-  end
-  Object.class_eval do
-    alias :require :original_require
-    undef :original_require
-  end
-end

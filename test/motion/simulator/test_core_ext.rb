@@ -4,22 +4,72 @@ module Motion
   module Simulator
     class TestCoreExt < MiniTest::Unit::TestCase
 
+      class Foo; end
+      class Fu; end
+
       describe "lib/motion-bundler/simulator/core_ext.rb" do
         it "should ignore require statements with a warning" do
           MotionBundler.expects(:simulator?).returns true
-          taintable_core do
-            assert_output "Require \"a\" ignored\n" do
-              MotionBundler::Require.default_files.each do |default_file|
-                require default_file
+          last_loaded_feature = nil
+          fu = Fu.new
+
+          warnings = [
+            "Require \"a\" ignored",
+            "Relative require \"../../lib/a\" ignored",
+            "Load \"../../lib/a.rb\" ignored",
+            "Autoload \"../../lib/a.rb\" ignored",
+            "Module eval ignored",
+            "Class eval ignored",
+            "Instance eval ignored"
+          ]
+
+          assert_output warnings.join("\n") + "\n" do
+            MotionBundler::Require.default_files.each do |default_file|
+              require default_file
+            end
+            last_loaded_feature = $LOADED_FEATURES.last
+
+            assert_nil require("a")
+            assert_nil require_relative("../../lib/a")
+            assert_nil load("../../lib/a.rb")
+
+            class Foo
+              autoload :A, "../../lib/a.rb"
+            end
+
+            Foo.module_eval "def bar; end"
+            Foo.module_eval do
+              def baz
               end
-              require "a"
+            end
+
+            Fu.class_eval "def bar; end"
+            Fu.class_eval do
+              def baz
+              end
+            end
+
+            fu.instance_eval "def qux; end"
+            fu.instance_eval do
+              def quux
+              end
             end
           end
+
+          assert_equal last_loaded_feature, $LOADED_FEATURES.last
           assert_raises NameError do
             A
           end
-          require "a"
-          assert A
+          assert_raises NameError do
+            Foo::A
+          end
+
+          assert_equal false, Foo.new.respond_to?(:bar)
+          assert_equal true , Foo.new.respond_to?(:baz)
+          assert_equal false, Fu.new.respond_to?(:bar)
+          assert_equal true , Fu.new.respond_to?(:baz)
+          assert_equal false, fu.respond_to?(:qux)
+          assert_equal true , fu.respond_to?(:quux)
         end
       end
 

@@ -1,15 +1,16 @@
 module Kernel
   def require(name)
   end
-  #require_relative(string)
-  #load(filename, wrap=false)
-  #autoload(mod, filename)
+  def require_relative(string)
+  end
+  def load(filename, wrap=false)
+  end
+  def autoload(mod, filename)
+  end
 end
 class Module
-  #autoload(mod, filename)
-end
-class Class
-  #delegate(*args)
+  def autoload(mod, filename)
+  end
 end
 class Object
   def require(name)

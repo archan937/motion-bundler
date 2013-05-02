@@ -7,19 +7,30 @@ module Motion
       describe "lib/motion-bundler/device/core_ext.rb" do
         it "should ignore require statements without a warning" do
           MotionBundler.expects(:simulator?).returns false
-          taintable_core do
-            assert_output "" do
-              MotionBundler::Require.default_files.each do |default_file|
-                require default_file
-              end
-              require "a"
+          last_loaded_feature = nil
+
+          assert_output "" do
+            MotionBundler::Require.default_files.each do |default_file|
+              require default_file
+            end
+            last_loaded_feature = $LOADED_FEATURES.last
+
+            assert_nil require("a")
+            assert_nil require_relative("../../lib/a")
+            assert_nil load("../../lib/a.rb")
+
+            class Foo
+              autoload :A, "../../lib/a.rb"
             end
           end
+
+          assert_equal last_loaded_feature, $LOADED_FEATURES.last
           assert_raises NameError do
             A
           end
-          require "a"
-          assert A
+          assert_raises NameError do
+            Foo::A
+          end
         end
       end
 
