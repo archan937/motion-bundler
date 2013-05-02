@@ -1,4 +1,4 @@
-require "b/a/a"
+load "b/a/a"
 
 module B
   module A
