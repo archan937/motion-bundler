@@ -62,7 +62,6 @@ Please consult the [GitHub repository Wiki pages](https://github.com/archan937/m
 ## Roadmap
 
 * Improve printed warnings when running in iOS Simulator
-* Mock requiring "simple" Ruby standard library sources
 
 ## Contact me
 

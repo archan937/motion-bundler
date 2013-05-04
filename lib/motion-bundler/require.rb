@@ -1,4 +1,5 @@
 require "motion-bundler/require/tracer"
+require "motion-bundler/require/mocker"
 
 module MotionBundler
   module Require
@@ -10,6 +11,12 @@ module MotionBundler
 
     def trace
       Tracer.yield do
+        yield
+      end
+    end
+
+    def mock
+      Mocker.yield do
         yield
       end
     end

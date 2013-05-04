@@ -18,6 +18,10 @@ def gem_path(name)
   File.expand_path "../gems/#{name}", __FILE__
 end
 
+def mocks_dir
+  File.expand_path "../mocks", __FILE__
+end
+
 def motion_gemfile(content)
   content = "source \"https://rubygems.org\"\n\n#{content}"
   dirname = File.dirname __FILE__

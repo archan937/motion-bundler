@@ -6,6 +6,12 @@ module Unit
 
       describe MotionBundler::Require::Tracer do
 
+        describe "hooks" do
+          it "should have MotionBundler::Require::Tracer::Hooks included" do
+            assert_equal true, MotionBundler::Require::Tracer.included_modules.include?(MotionBundler::Require::Tracer::Hooks)
+          end
+        end
+
         describe "calling `yield`" do
           it "should start, yield and stop" do
             object = mock "object"
