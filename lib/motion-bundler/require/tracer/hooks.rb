@@ -2,7 +2,6 @@ module MotionBundler
   module Require
     module Tracer
       module Hooks
-        extend self
 
         def hook
           Kernel.instance_eval &require_hook          unless Kernel.respond_to?(:require_with_mb_trace)

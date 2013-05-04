@@ -14,7 +14,7 @@ module Unit
             assert_equal false, Kernel.respond_to?(:load_with_mb_trace)
             assert_equal false, Object.respond_to?(:load_with_mb_trace)
 
-            MotionBundler::Require::Tracer::Hooks.send :hook
+            MotionBundler::Require::Tracer.hook
             assert_equal true, Kernel.respond_to?(:require_with_mb_trace)
             assert_equal true, Object.respond_to?(:require_with_mb_trace)
             assert_equal true, Kernel.respond_to?(:require_relative_with_mb_trace)
@@ -36,7 +36,7 @@ module Unit
               autoload :VERSION, gem_path("slot_machine/lib/slot_machine/version")
             end
 
-            MotionBundler::Require::Tracer::Hooks.send :unhook
+            MotionBundler::Require::Tracer.unhook
             assert_equal false, Kernel.respond_to?(:require_with_mb_trace)
             assert_equal false, Object.respond_to?(:require_with_mb_trace)
             assert_equal false, Kernel.respond_to?(:require_relative_with_mb_trace)

@@ -4,6 +4,7 @@ require "motion-bundler/require/tracer/log"
 module MotionBundler
   module Require
     module Tracer
+      include Hooks
       extend self
 
       def log
@@ -21,11 +22,11 @@ module MotionBundler
 
       def start
         log.clear
-        Hooks.hook
+        hook
       end
 
       def stop
-        Hooks.unhook
+        unhook
       end
 
     end

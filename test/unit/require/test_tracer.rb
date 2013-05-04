@@ -49,14 +49,14 @@ module Unit
           end
 
           it "should hook into require relatied core methods" do
-            MotionBundler::Require::Tracer::Hooks.expects :hook
+            MotionBundler::Require::Tracer.expects :hook
             MotionBundler::Require::Tracer.send :start
           end
         end
 
         describe "calling `stop`" do
           it "should unhook form require relatied core methods" do
-            MotionBundler::Require::Tracer::Hooks.expects :unhook
+            MotionBundler::Require::Tracer.expects :unhook
             MotionBundler::Require::Tracer.send :stop
           end
         end
