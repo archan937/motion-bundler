@@ -7,20 +7,20 @@ module Unit
 
         describe MotionBundler::Require::Tracer::Hooks do
           it "should hook into core methods" do
-            assert_equal false, Kernel.respond_to?(:require_with_hook)
-            assert_equal false, Object.respond_to?(:require_with_hook)
-            assert_equal false, Kernel.respond_to?(:require_relative_with_hook)
-            assert_equal false, Object.respond_to?(:require_relative_with_hook)
-            assert_equal false, Kernel.respond_to?(:load_with_hook)
-            assert_equal false, Object.respond_to?(:load_with_hook)
+            assert_equal false, Kernel.respond_to?(:require_with_mb_trace)
+            assert_equal false, Object.respond_to?(:require_with_mb_trace)
+            assert_equal false, Kernel.respond_to?(:require_relative_with_mb_trace)
+            assert_equal false, Object.respond_to?(:require_relative_with_mb_trace)
+            assert_equal false, Kernel.respond_to?(:load_with_mb_trace)
+            assert_equal false, Object.respond_to?(:load_with_mb_trace)
 
             MotionBundler::Require::Tracer::Hooks.send :hook
-            assert_equal true, Kernel.respond_to?(:require_with_hook)
-            assert_equal true, Object.respond_to?(:require_with_hook)
-            assert_equal true, Kernel.respond_to?(:require_relative_with_hook)
-            assert_equal true, Object.respond_to?(:require_relative_with_hook)
-            assert_equal true, Kernel.respond_to?(:load_with_hook)
-            assert_equal true, Object.respond_to?(:load_with_hook)
+            assert_equal true, Kernel.respond_to?(:require_with_mb_trace)
+            assert_equal true, Object.respond_to?(:require_with_mb_trace)
+            assert_equal true, Kernel.respond_to?(:require_relative_with_mb_trace)
+            assert_equal true, Object.respond_to?(:require_relative_with_mb_trace)
+            assert_equal true, Kernel.respond_to?(:load_with_mb_trace)
+            assert_equal true, Object.respond_to?(:load_with_mb_trace)
 
             MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'")
             require "a"
@@ -37,12 +37,12 @@ module Unit
             end
 
             MotionBundler::Require::Tracer::Hooks.send :unhook
-            assert_equal false, Kernel.respond_to?(:require_with_hook)
-            assert_equal false, Object.respond_to?(:require_with_hook)
-            assert_equal false, Kernel.respond_to?(:require_relative_with_hook)
-            assert_equal false, Object.respond_to?(:require_relative_with_hook)
-            assert_equal false, Kernel.respond_to?(:load_with_hook)
-            assert_equal false, Object.respond_to?(:load_with_hook)
+            assert_equal false, Kernel.respond_to?(:require_with_mb_trace)
+            assert_equal false, Object.respond_to?(:require_with_mb_trace)
+            assert_equal false, Kernel.respond_to?(:require_relative_with_mb_trace)
+            assert_equal false, Object.respond_to?(:require_relative_with_mb_trace)
+            assert_equal false, Kernel.respond_to?(:load_with_mb_trace)
+            assert_equal false, Object.respond_to?(:load_with_mb_trace)
           end
         end
 
