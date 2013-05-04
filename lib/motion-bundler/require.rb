@@ -9,9 +9,9 @@ module MotionBundler
     end
 
     def trace
-      Tracer.start
-      yield
-      Tracer.stop
+      Tracer.yield do
+        yield
+      end
     end
 
     def files

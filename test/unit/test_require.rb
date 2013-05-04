@@ -8,17 +8,19 @@ module Unit
         object = mock "object"
         object.expects :do_something
 
-        MotionBundler::Require::Tracer.expects :start
-        MotionBundler::Require::Tracer.expects :stop
-
         MotionBundler::Require.trace do
           object.do_something
+        end
+
+        MotionBundler::Require::Tracer.expects :yield
+        MotionBundler::Require.trace do
         end
       end
 
       it "should determine RubyMotion app 'default files'" do
         MotionBundler.expects(:simulator?).returns(true)
         assert_equal [lib_file("motion-bundler/simulator/core_ext.rb")], MotionBundler::Require.default_files
+
         MotionBundler.expects(:simulator?).returns(false)
         assert_equal [lib_file("motion-bundler/device/core_ext.rb")], MotionBundler::Require.default_files
       end

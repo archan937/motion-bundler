@@ -10,6 +10,15 @@ module MotionBundler
         Thread.current[:motion_bundler_log] ||= Log.new
       end
 
+      def yield
+        start
+        yield
+      ensure
+        stop
+      end
+
+    private
+
       def start
         log.clear
         Hooks.hook
