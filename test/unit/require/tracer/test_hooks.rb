@@ -26,7 +26,7 @@ module Unit
             require "a"
 
             MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'")
-            require_relative "../../../../lib/b"
+            require_relative "../../../lib/b"
 
             MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'")
             load "c.rb"

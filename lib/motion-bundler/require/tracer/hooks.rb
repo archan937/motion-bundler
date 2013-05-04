@@ -43,7 +43,7 @@ module MotionBundler
           @require_relative_hook ||= proc do
             def require_relative_with_mb_trace(path)
               caller[0].match(/^(.*\.rb)\b/)
-              require_with_mb_trace File.expand_path(path, $1), caller[0]
+              require_with_mb_trace File.expand_path("../#{path}", $1), caller[0]
             end
             alias :require_relative_without_mb_trace :require_relative
             alias :require_relative :require_relative_with_mb_trace
