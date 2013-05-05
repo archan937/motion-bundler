@@ -4,4 +4,7 @@ module Kernel
       yield
     end
   end
+  def trace_require?
+    Kernel.respond_to? :require_with_mb_trace
+  end
 end
