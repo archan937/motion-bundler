@@ -10,6 +10,12 @@ require "minitest/autorun"
 require "mocha/setup"
 require "motion-bundler"
 
+class MiniTest::Unit::TestCase
+  def setup
+    ENV["MB_SILENCE_CORE"] = "false"
+  end
+end
+
 def lib_file(path)
   File.expand_path "../../lib/#{path}", __FILE__
 end
@@ -46,4 +52,49 @@ def motion_gemfile(content)
   ENV["BUNDLE_GEMFILE"] = gemfile
   require "bundler"
   Bundler.setup
+end
+
+def taintable_core
+  Kernel.instance_eval do
+    alias :_ruby_require :require
+    alias :_ruby_require_relative :require_relative
+    alias :_ruby_load :load
+    alias :_ruby_autoload :autoload
+  end
+  Module.class_eval do
+    alias :_ruby_autoload :autoload
+    alias :_ruby_class_eval :class_eval
+    alias :_ruby_module_eval :module_eval
+  end
+  Object.class_eval do
+    alias :_ruby_require :require
+    alias :_ruby_instance_eval :instance_eval
+  end
+  yield
+ensure
+  Kernel.instance_eval do
+    alias :require :_ruby_require
+    alias :require_relative :_ruby_require_relative
+    alias :load :_ruby_load
+    alias :autoload :_ruby_autoload
+    undef :_ruby_require
+    undef :_ruby_require_relative
+    undef :_ruby_load
+    undef :_ruby_autoload
+    undef :mb_warn if respond_to?(:mb_warn)
+  end
+  Module.class_eval do
+    alias :autoload :_ruby_autoload
+    alias :class_eval :_ruby_class_eval
+    alias :module_eval :_ruby_module_eval
+    undef :_ruby_autoload
+    undef :_ruby_class_eval
+    undef :_ruby_module_eval
+  end
+  Object.class_eval do
+    alias :require :_ruby_require
+    alias :instance_eval :_ruby_instance_eval
+    undef :_ruby_require
+    undef :_ruby_instance_eval
+  end
 end

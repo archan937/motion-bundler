@@ -30,29 +30,12 @@ module Unit
         end
       end
 
-      it "should determine RubyMotion app 'default files'" do
-        MotionBundler.expects(:simulator?).returns(true)
-        assert_equal [lib_file("motion-bundler/simulator/core_ext.rb")], MotionBundler::Require.default_files
+      it "should return log files and files_dependencies" do
+        MotionBundler::Require::Tracer.log.expects(:files)
+        MotionBundler::Require.files
 
-        MotionBundler.expects(:simulator?).returns(false)
-        assert_equal [lib_file("motion-bundler/device/core_ext.rb")], MotionBundler::Require.default_files
-      end
-
-      it "should consolidate files and files_dependencies" do
-        MotionBundler::Require::Tracer.log.instance_variable_set :@log, {
-          "BUNDLER" => %w(file1),
-          "/Sources/lib/file1.rb" => %w(file0 file2),
-          "/Sources/lib/file2.rb" => %w(file3 file4)
-        }
-
-        assert_equal [
-          lib_file("motion-bundler/simulator/core_ext.rb")
-        ] + %w(/Sources/lib/file1.rb /Sources/lib/file2.rb file0 file1 file2 file3 file4), MotionBundler::Require.files
-        assert_equal({
-          "file1" => [lib_file("motion-bundler/simulator/core_ext.rb")],
-          "/Sources/lib/file1.rb" => %w(file0 file2),
-          "/Sources/lib/file2.rb" => %w(file3 file4)
-        }, MotionBundler::Require.files_dependencies)
+        MotionBundler::Require::Tracer.log.expects(:files_dependencies)
+        MotionBundler::Require.files_dependencies
       end
     end
 

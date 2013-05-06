@@ -10,7 +10,7 @@ module Motion
           last_loaded_feature = nil
 
           assert_output "" do
-            MotionBundler::Require.default_files.each do |default_file|
+            MotionBundler.default_files.each do |default_file|
               require default_file
             end
             last_loaded_feature = $LOADED_FEATURES.last

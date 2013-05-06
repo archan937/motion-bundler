@@ -8,51 +8,44 @@ module Motion
       class Fu; end
 
       describe "lib/motion-bundler/simulator/core_ext.rb" do
+        before do
+          ENV["MB_SILENCE_CORE"] = "true"
+        end
+
         it "should ignore require statements with a warning" do
           MotionBundler.expects(:simulator?).returns true
           last_loaded_feature = nil
           fu = Fu.new
 
-          warnings = [
-            "Require \"a\" ignored",
-            "Relative require \"../../lib/a\" ignored",
-            "Load \"../../lib/a.rb\" ignored",
-            "Autoload \"../../lib/a.rb\" ignored",
-            "Module eval ignored",
-            "Class eval ignored",
-            "Instance eval ignored"
-          ]
+          MotionBundler.default_files.each do |default_file|
+            require default_file
+          end
 
-          assert_output warnings.join("\n") + "\n" do
-            MotionBundler::Require.default_files.each do |default_file|
-              require default_file
+          last_loaded_feature = $LOADED_FEATURES.last
+
+          assert_nil require("a")
+          assert_nil require_relative("../../lib/a")
+          assert_nil load("../../lib/a.rb")
+
+          class Foo
+            autoload :A, "../../lib/a.rb"
+          end
+
+          Foo.module_eval "def bar; end"
+          Foo.module_eval do
+            def baz
             end
-            last_loaded_feature = $LOADED_FEATURES.last
+          end
 
-            assert_nil require("a")
-            assert_nil require_relative("../../lib/a")
-            assert_nil load("../../lib/a.rb")
-
-            class Foo
-              autoload :A, "../../lib/a.rb"
+          Fu.class_eval "def bar; end"
+          Fu.class_eval do
+            def baz
             end
+          end
 
-            Foo.module_eval "def bar; end"
-            Foo.module_eval do
-              def baz
-              end
-            end
-
-            Fu.class_eval "def bar; end"
-            Fu.class_eval do
-              def baz
-              end
-            end
-
-            fu.instance_eval "def qux; end"
-            fu.instance_eval do
-              def quux
-              end
+          fu.instance_eval "def qux; end"
+          fu.instance_eval do
+            def quux
             end
           end
 

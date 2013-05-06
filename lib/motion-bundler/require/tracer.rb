@@ -21,11 +21,13 @@ module MotionBundler
     private
 
       def start
+        ENV["MB_SILENCE_CORE"] = "false"
         log.clear
         hook
       end
 
       def stop
+        ENV["MB_SILENCE_CORE"] = "true"
         unhook
       end
 

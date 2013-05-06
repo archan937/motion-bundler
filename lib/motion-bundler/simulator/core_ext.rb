@@ -1,48 +1,53 @@
-module Kernel
-  def require(name)
-    puts "Require #{name.inspect} ignored"
-  end
-  def require_relative(string)
-    puts "Relative require #{string.inspect} ignored"
-  end
-  def load(filename, wrap=false)
-    puts "Load #{filename.inspect} ignored"
-  end
-  def autoload(mod, filename)
-    puts "Autoload #{filename.inspect} ignored"
-  end
-end
-class Module
-  def autoload(mod, filename)
-    puts "Autoload #{filename.inspect} ignored"
-  end
-  alias :original_class_eval :class_eval
-  def class_eval(*args, &block)
-    if block_given?
-      original_class_eval &block
-    else
-      puts "Class eval ignored"
+unless ENV["MB_SILENCE_CORE"] == "false"
+
+  module Kernel
+    def mb_warn(*args)
+      ::Simulator::MotionBundler.warn *args if defined?(::Simulator)
     end
   end
-  alias :original_module_eval :module_eval
-  def module_eval(*args, &block)
-    if block_given?
-      original_module_eval &block
-    else
-      puts "Module eval ignored"
+
+  class Object
+    def require(name)
+      mb_warn "require \"#{name}\"", caller
+    end
+    def require_relative(string)
+      mb_warn "require_relative \"#{string}\"", caller
+    end
+    def load(filename, wrap=false)
+      mb_warn "load \"#{filename}\"", caller
+    end
+    alias :original_instance_eval :instance_eval
+    def instance_eval(*args, &block)
+      if block_given?
+        original_instance_eval &block
+      else
+        mb_warn self.class.name, :instance_eval, caller
+      end
     end
   end
-end
-class Object
-  def require(name)
-    puts "Require #{name.inspect} ignored"
-  end
-  alias :original_instance_eval :instance_eval
-  def instance_eval(*args, &block)
-    if block_given?
-      original_instance_eval &block
-    else
-      puts "Instance eval ignored"
+
+  class Module
+    def autoload(mod, filename)
+      mb_warn "autoload :#{mod}, \"#{filename}\"", caller
+    end
+    alias :original_class_eval :class_eval
+    def class_eval(*args, &block)
+      if block_given?
+        original_class_eval &block
+      else
+        mb_warn name, :class_eval, caller
+      end
+    end
+    alias :original_module_eval :module_eval
+    def module_eval(*args, &block)
+      if block_given?
+        original_module_eval &block
+      else
+        mb_warn name, :module_eval, caller
+      end
     end
   end
+
 end
+
+require_relative "motion-bundler"
