@@ -1,6 +1,7 @@
 require File.expand_path("../../../test_helper", __FILE__)
 
 motion_gemfile <<-G
+gem "motion-bundler", :path => "#{lib_file ".."}"
 group :motion do
   gem "slot_machine", :path => "#{gem_path "slot_machine"}"
 end
@@ -16,9 +17,12 @@ module Motion
             SlotMachine
           end
 
+          colorize = "#{Bundler.load.specs.detect{|x| x.name == "colorize"}.full_gem_path}/lib/colorize.rb"
+
           files = %w(/Users/paulengel/foo.rb /Users/paulengel/bar.rb)
           Motion::Project::App.any_instance.expects(:files).returns files
           Motion::Project::App.any_instance.expects(:files=).with([
+            colorize,
             lib_file("motion-bundler/simulator/core_ext.rb"),
             lib_file("motion-bundler/simulator/motion-bundler.rb"),
             gem_path("slot_machine/lib/slot.rb"),
@@ -34,6 +38,7 @@ module Motion
           ])
           Motion::Project::App.any_instance.expects(:files_dependencies).with(
             lib_file("motion-bundler/simulator/core_ext.rb") => [
+              colorize,
               lib_file("motion-bundler/simulator/motion-bundler.rb")
             ],
             gem_path("slot_machine/lib/slot_machine.rb") => [

@@ -50,4 +50,5 @@ unless ENV["MB_SILENCE_CORE"] == "false"
 
 end
 
+require "colorize"
 require_relative "motion-bundler"

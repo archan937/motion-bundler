@@ -7,6 +7,10 @@ module Unit
 
       describe ::Simulator::MotionBundler do
         it "should print warnings as expected" do
+          String.class_eval do
+            alias :_yellow :yellow
+            alias :yellow :to_s
+          end
           assert_output "   Warning Called `require \"foo\"` from\n           <unknown path>\n" do
             ::Simulator::MotionBundler.warn "require \"foo\"", nil
           end
@@ -18,6 +22,10 @@ module Unit
           end
           assert_output "   Warning Called `Foo.bar` from\n           /Users/paulengel/fu/baz.rb:47\n" do
             ::Simulator::MotionBundler.warn "Foo", :bar, "/Users/paulengel/fu/baz.rb:47:in `<module:SlotMachine>'"
+          end
+          String.class_eval do
+            alias :_yellow :yellow
+            undef :_yellow
           end
         end
       end

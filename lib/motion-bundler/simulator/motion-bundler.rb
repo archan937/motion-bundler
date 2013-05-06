@@ -12,7 +12,7 @@ module Simulator
         end
         "Called `#{method_call}` from\n#{derive_caller caller}"
       end
-      puts "   Warning #{message.gsub("\n", "\n           ")}"
+      puts "   Warning #{message.gsub("\n", "\n           ")}".yellow
     end
 
   private

@@ -59,10 +59,6 @@ Yes, I did. But MotionBundler ...
 
 Please consult the [GitHub repository Wiki pages](https://github.com/archan937/motion-bundler/wiki) for further information about MotionBundler.
 
-## Roadmap
-
-* Improve printed warnings when running in iOS Simulator
-
 ## Contact me
 
 For support, remarks and requests, please mail me at [paul.engel@holder.nl](mailto:paul.engel@holder.nl).
