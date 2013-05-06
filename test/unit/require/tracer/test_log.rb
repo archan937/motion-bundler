@@ -12,19 +12,23 @@ module Unit
 
           it "should be able to clear it's log" do
             @log.instance_variable_set :@log, {"a" => "b"}
+            @log.instance_variable_set :@requires, {"c" => "d"}
             @log.clear
             assert_equal true, @log.instance_variable_get(:@log).empty?
+            assert_equal true, @log.instance_variable_get(:@requires).empty?
           end
 
           it "should register dependencies as expected" do
             loaded_features = %w(foo1 foo2 foo3)
             @log.expects(:loaded_features).at_least_once.returns loaded_features
-            @log.instance_variable_set :@log, {"/Sources/lib/file1.rb" => ["file0"]}
 
-            @log.register "/.rvm/gems/bundler/bundler.rb:63" do
-              @log.register "/Sources/lib/file1.rb:129" do
-                @log.register "/Sources/lib/file2.rb:1" do
-                  @log.register "/Sources/lib/file2.rb:2" do
+            @log.instance_variable_set :@log, {"/Sources/lib/file1.rb" => ["file0"]}
+            @log.instance_variable_set :@requires, {"/Sources/lib/file1.rb:47" => ["file0"]}
+
+            @log.register "/.rvm/gems/bundler/bundler.rb:63", "foo" do
+              @log.register "/Sources/lib/file1.rb:129:in `<module:Foo>'", "file2" do
+                @log.register "/Sources/lib/file2.rb:1", "file3" do
+                  @log.register "/Sources/lib/file2.rb:2", "file4" do
                     loaded_features << "file4"
                   end
                   loaded_features << "file3"
@@ -39,23 +43,34 @@ module Unit
               "/Sources/lib/file1.rb" => %w(file0 file2),
               "/Sources/lib/file2.rb" => %w(file3 file4)
             }, @log.instance_variable_get(:@log))
-          end
 
-          it "should return files and files_dependencies as expected" do
-            @log.instance_variable_set :@log, {
-              "BUNDLER" => %w(file1),
-              "/Sources/lib/file1.rb" => %w(file0 file2),
-              "/Sources/lib/file2.rb" => %w(file3 file4)
-            }
+            assert_equal %w(
+              /Sources/lib/file1.rb
+              /Sources/lib/file2.rb
+              BUNDLER
+              file0
+              file1
+              file2
+              file3
+              file4
+            ), @log.files
 
-            assert_equal %w(/Sources/lib/file1.rb /Sources/lib/file2.rb BUNDLER file0 file1 file2 file3 file4), @log.files
+            assert_equal true, @log.files_dependencies.object_id != @log.instance_variable_get(:@log).object_id
+            assert_equal true, @log.requires.object_id != @log.instance_variable_get(:@requires).object_id
+
             assert_equal({
               "BUNDLER" => %w(file1),
               "/Sources/lib/file1.rb" => %w(file0 file2),
               "/Sources/lib/file2.rb" => %w(file3 file4)
             }, @log.files_dependencies)
 
-            assert_equal true, @log.files_dependencies.object_id != @log.instance_variable_get(:@log).object_id
+            assert_equal({
+              "BUNDLER" => %w(foo),
+              "/Sources/lib/file1.rb:47" => %w(file0),
+              "/Sources/lib/file1.rb:129" => %w(file2),
+              "/Sources/lib/file2.rb:1" => %w(file3),
+              "/Sources/lib/file2.rb:2" => %w(file4)
+            }, @log.requires)
           end
         end
 

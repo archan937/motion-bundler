@@ -22,16 +22,16 @@ module Unit
             assert_equal true, Kernel.respond_to?(:load_with_mb_trace)
             assert_equal true, Object.respond_to?(:load_with_mb_trace)
 
-            MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'")
+            MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'", "a")
             require "a"
 
-            MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'")
+            MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'", File.expand_path("../../../../lib/b", __FILE__))
             require_relative "../../../lib/b"
 
-            MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'")
+            MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 1}:in `block (2 levels) in <class:TestHooks>'", "c.rb")
             load "c.rb"
 
-            MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 2}:in `<module:SlotMachine>'")
+            MotionBundler::Require::Tracer.log.expects(:register).with("#{__FILE__}:#{__LINE__ + 2}:in `<module:SlotMachine>'", gem_path("slot_machine/lib/slot_machine/version"))
             module ::SlotMachine
               autoload :VERSION, gem_path("slot_machine/lib/slot_machine/version")
             end

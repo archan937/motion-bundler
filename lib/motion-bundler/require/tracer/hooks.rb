@@ -29,7 +29,7 @@ module MotionBundler
           @require_hook ||= proc do
             def require_with_mb_trace(path, _caller = nil)
               result = nil
-              MotionBundler::Require::Tracer.log.register(_caller || caller[0]) do
+              MotionBundler::Require::Tracer.log.register(_caller || caller[0], path) do
                 result = require_without_mb_trace path
               end
               result

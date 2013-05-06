@@ -5,16 +5,21 @@ module MotionBundler
 
         def initialize
           @log = {}
+          @requires = {}
         end
 
         def clear
           @log.clear
+          @requires.clear
         end
 
-        def register(file)
-          return unless file.match(/^(.*\.rb)\b/)
+        def register(file, path)
+          return unless file.match(/^(.*\.rb):(\d+)/)
 
           file = $1.include?("/bundler/") ? "BUNDLER" : $1
+          line = $1.include?("/bundler/") ? nil : $2
+
+          (@requires[[file, line].compact.join(":")] ||= []) << path
           dependencies = (@log[file] ||= [])
           index = dependencies.size
 
@@ -30,6 +35,10 @@ module MotionBundler
 
         def files_dependencies
           @log.dup
+        end
+
+        def requires
+          @requires.dup
         end
 
       private
