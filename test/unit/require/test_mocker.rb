@@ -24,14 +24,16 @@ module Unit
             end
           end
 
-          it "should stop when error raised" do
-            MotionBundler::Require::Mocker.expects :start
-            MotionBundler::Require::Mocker.expects :stop
-            begin
-              MotionBundler::Require::Mocker.yield do
-                raise
+          describe "when error raised" do
+            it "should stop" do
+              MotionBundler::Require::Mocker.expects :start
+              MotionBundler::Require::Mocker.expects :stop
+              begin
+                MotionBundler::Require::Mocker.yield do
+                  raise
+                end
+              rescue
               end
-            rescue
             end
           end
         end
