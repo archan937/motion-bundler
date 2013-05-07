@@ -9,18 +9,34 @@ module Unit
         it "should print warnings as expected" do
           String.class_eval do
             alias :yellow :to_s
+            alias :green :to_s
           end
-          assert_output "   Warning Called `require \"foo\"` from\n           <unknown path>\n" do
-            MotionBundler::Simulator::Console.warn "require \"foo\"", nil
+          assert_output "   Warning Called `require \"foo\"`\n           Add within setup block: require \"foo\"\n" do
+            MotionBundler::Simulator::Console.warn do
+              require "foo"
+            end
           end
-          assert_output "   Warning Called `require \"foo\"` from\n           /Users/paulengel/fu/baz.rb:47\n" do
-            MotionBundler::Simulator::Console.warn "require \"foo\"", "/Users/paulengel/fu/baz.rb:47:in `<module:SlotMachine>'"
+          assert_output "   Warning Called `require_relative \"foo\"`\n           Add within setup block: require \"foo\"\n" do
+            MotionBundler::Simulator::Console.warn do
+              require_relative "foo"
+            end
           end
-          assert_output "   Warning Called `Foo.bar` from\n           <unknown path>\n" do
-            MotionBundler::Simulator::Console.warn "Foo", :bar, nil
+          assert_output "   Warning Called `load \"foo\"`\n           Add within setup block: require \"foo\"\n" do
+            MotionBundler::Simulator::Console.warn do
+              load "foo"
+            end
           end
-          assert_output "   Warning Called `Foo.bar` from\n           /Users/paulengel/fu/baz.rb:47\n" do
-            MotionBundler::Simulator::Console.warn "Foo", :bar, "/Users/paulengel/fu/baz.rb:47:in `<module:SlotMachine>'"
+          assert_output "   Warning Called `autoload :Foo, \"foo\"`\n           Add within setup block: require \"foo\"\n" do
+            MotionBundler::Simulator::Console.warn do
+              autoload :Foo, "foo"
+            end
+          end
+          assert_output "   Warning Called `Foo.bar`\n           Don't do that!\n" do
+            MotionBundler::Simulator::Console.warn do
+              object "Foo"
+              method :bar
+              message "Don't do that!"
+            end
           end
         end
       end

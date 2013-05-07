@@ -1,30 +1,54 @@
 module MotionBundler
   module Simulator
     module Console
-      extend self
 
-      def warn(*args)
-        message = begin
-          if args.size == 2
-            method_call, caller = *args
-          else
-            object, method, caller = *args
-            method_call = "#{object}.#{method}"
+      class Warning
+        def print
+          warning = "Warning Called `#{[@object, @method].compact.join "."}"
+          warning += " #{@args.collect(&:inspect).join ", "}" unless @args.nil? || @args.empty?
+          warning += "`"
+          warning = warning.yellow
+          if [:require, :require_relative, :load, :autoload].include? @method
+            warning += "\nAdd within setup block: ".yellow
+            warning += "require \"#{@args.last}\"".green
+          elsif @message
+            warning += "\n#{@message}".green
           end
-          "Called `#{method_call}` from\n#{derive_caller caller}"
+          puts "   #{warning.gsub("\n", "\n" + (" " * 11))}"
         end
-        puts "   Warning #{message.gsub("\n", "\n           ")}".yellow
+      private
+        def require(*args)
+          @method = :require
+          @args = args
+          @method
+        end
+        def require_relative(*args)
+          @method = :require_relative
+          @args = args
+        end
+        def load(*args)
+          @method = :load
+          @args = args
+        end
+        def autoload(*args)
+          @method = :autoload
+          @args = args
+        end
+        def object(object)
+          @object = object
+        end
+        def method(method)
+          @method = method
+        end
+        def message(message)
+          @message = message
+        end
       end
 
-    private
-
-      def derive_caller(caller)
-        [caller].flatten[0].to_s.match /^(.*\.rb):(\d+)/
-        if $1
-          "#{$1}:#{$2}"
-        else
-          "<unknown path>"
-        end
+      def self.warn(&block)
+        warning = Warning.new
+        warning.instance_eval &block
+        warning.print
       end
 
     end
