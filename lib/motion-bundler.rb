@@ -45,7 +45,7 @@ module MotionBundler
   end
 
   def default_files
-    [File.expand_path("../motion-bundler/#{simulator? ? "simulator" : "device"}/core_ext.rb", __FILE__)]
+    [File.expand_path("../motion-bundler/#{simulator? ? "simulator" : "device"}/boot.rb", __FILE__)]
   end
 
 private
