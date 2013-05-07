@@ -24,8 +24,8 @@ module Motion
           Motion::Project::App.any_instance.expects(:files=).with([
             colorize,
             lib_file("motion-bundler/simulator/boot.rb"),
+            lib_file("motion-bundler/simulator/console.rb"),
             lib_file("motion-bundler/simulator/core_ext.rb"),
-            lib_file("motion-bundler/simulator/motion-bundler.rb"),
             gem_path("slot_machine/lib/slot.rb"),
             gem_path("slot_machine/lib/slot_machine.rb"),
             gem_path("slot_machine/lib/slot_machine/slot.rb"),
@@ -41,7 +41,7 @@ module Motion
             lib_file("motion-bundler/simulator/boot.rb") => [
               lib_file("motion-bundler/simulator/core_ext.rb"),
               colorize,
-              lib_file("motion-bundler/simulator/motion-bundler.rb")
+              lib_file("motion-bundler/simulator/console.rb")
             ],
             gem_path("slot_machine/lib/slot_machine.rb") => [
               lib_file("motion-bundler/simulator/boot.rb"),

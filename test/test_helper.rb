@@ -81,7 +81,7 @@ ensure
     undef :_ruby_require_relative
     undef :_ruby_load
     undef :_ruby_autoload
-    undef :mb_warn if respond_to?(:mb_warn)
+    undef :console if respond_to?(:console)
   end
   Module.class_eval do
     alias :autoload :_ruby_autoload

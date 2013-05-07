@@ -1,5 +1,5 @@
 require File.expand_path("../../../test_helper", __FILE__)
-require "motion-bundler/simulator/motion-bundler"
+require "motion-bundler/simulator/console"
 
 module Unit
   module Simulator
@@ -11,15 +11,14 @@ module Unit
         end
 
         it "should override core methods as expected" do
-          assert_equal false, Kernel.respond_to?(:mb_warn)
+          assert_equal false, Kernel.respond_to?(:console)
           assert_equal false, Kernel.respond_to?(:_ruby_require)
 
           taintable_core do
-            ::Simulator::MotionBundler.expects(:warn).at_least_once
-            ::Simulator::MotionBundler.warn
+            MotionBundler::Simulator::Console.expects(:warn).at_least_once
 
             load lib_file("motion-bundler/simulator/core_ext.rb")
-            assert_equal true, Kernel.respond_to?(:mb_warn)
+            assert_equal true, Kernel.respond_to?(:console)
             assert_equal true, Kernel.respond_to?(:_ruby_require)
 
             require "foo"
@@ -40,7 +39,7 @@ module Unit
             Object.new.instance_eval "def foo; end"
           end
 
-          assert_equal false, Kernel.respond_to?(:mb_warn)
+          assert_equal false, Kernel.respond_to?(:console)
           assert_equal false, Kernel.respond_to?(:_ruby_require)
         end
       end
