@@ -19,10 +19,10 @@ module Unit
 
       it "should determine Motion::Project::App default files" do
         MotionBundler.expects(:simulator?).returns(true)
-        assert_equal [lib_file("motion-bundler/simulator/boot.rb")], MotionBundler.default_files
+        assert_equal [motion_bundler_file("motion-bundler/simulator/boot.rb")], MotionBundler.default_files
 
         MotionBundler.expects(:simulator?).returns(false)
-        assert_equal [lib_file("motion-bundler/device/boot.rb")], MotionBundler.default_files
+        assert_equal [motion_bundler_file("motion-bundler/device/boot.rb")], MotionBundler.default_files
       end
 
       it "should be able to touch MotionBundler::MOTION_BUNDLER_FILE" do
@@ -83,22 +83,23 @@ module Unit
 
           MotionBundler::Require.expects :trace
           MotionBundler::Require.expects(:files).returns [
-            lib_file("motion-bundler.rb"),
-            lib_file("motion-bundler/simulator/boot.rb"),
-            lib_file("motion-bundler/simulator/core_ext.rb"),
-            lib_file("motion-bundler/simulator/motion-bundler.rb"),
+            motion_bundler_file("motion-bundler.rb"),
+            motion_bundler_file("motion-bundler/simulator/boot.rb"),
+            motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
+            motion_bundler_file("motion-bundler/simulator/motion-bundler.rb"),
             "BUNDLER",
             "gems/foo-0.1.0/lib/foo.rb",
             "gems/foo-0.1.0/lib/foo/bar.rb",
             "gems/foo-0.1.0/lib/foo/version.rb"
           ]
           MotionBundler::Require.expects(:files_dependencies).returns({
-            lib_file("motion-bundler.rb") => [
-              lib_file("motion-bundler/simulator/boot.rb")
+            motion_bundler_file("motion-bundler.rb") => [
+              motion_bundler_file("motion-bundler/simulator/boot.rb")
             ],
-            lib_file("motion-bundler/simulator/boot.rb") => [
-              lib_file("motion-bundler/simulator/core_ext.rb"),
-              lib_file("motion-bundler/simulator/motion-bundler.rb")
+            motion_bundler_file("motion-bundler/simulator/boot.rb") => [
+              motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
+              motion_bundler_file("motion-bundler/simulator/motion-bundler.rb")
+            ],
             ],
             "BUNDLER" => [
               "gems/foo-0.1.0/lib/foo.rb"
@@ -111,9 +112,9 @@ module Unit
           Motion::Project::App.any_instance.expects(:files).returns(%w(delegate.rb controller.rb))
 
           Motion::Project::App.any_instance.expects(:files=).with([
-            lib_file("motion-bundler/simulator/boot.rb"),
-            lib_file("motion-bundler/simulator/core_ext.rb"),
-            lib_file("motion-bundler/simulator/motion-bundler.rb"),
+            motion_bundler_file("motion-bundler/simulator/boot.rb"),
+            motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
+            motion_bundler_file("motion-bundler/simulator/motion-bundler.rb"),
             "gems/foo-0.1.0/lib/foo.rb",
             "gems/foo-0.1.0/lib/foo/bar.rb",
             "gems/foo-0.1.0/lib/foo/version.rb",
@@ -121,12 +122,12 @@ module Unit
             "controller.rb"
           ])
           Motion::Project::App.any_instance.expects(:files_dependencies).with({
-            lib_file("motion-bundler/simulator/boot.rb") => [
-              lib_file("motion-bundler/simulator/core_ext.rb"),
-              lib_file("motion-bundler/simulator/motion-bundler.rb")
+            motion_bundler_file("motion-bundler/simulator/boot.rb") => [
+              motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
+              motion_bundler_file("motion-bundler/simulator/motion-bundler.rb")
             ],
             "gems/foo-0.1.0/lib/foo.rb" => [
-              lib_file("motion-bundler/simulator/boot.rb"),
+              motion_bundler_file("motion-bundler/simulator/boot.rb"),
               "gems/foo-0.1.0/lib/foo/bar.rb",
               "gems/foo-0.1.0/lib/foo/version.rb"
             ]

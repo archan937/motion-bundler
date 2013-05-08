@@ -17,7 +17,7 @@ module Unit
           taintable_core do
             MotionBundler::Simulator::Console.expects(:warn).at_least_once
 
-            load lib_file("motion-bundler/simulator/core_ext.rb")
+            load motion_bundler_file("motion-bundler/simulator/core_ext.rb")
             assert_equal true, Kernel.respond_to?(:console)
             assert_equal true, Kernel.respond_to?(:_ruby_require)
 

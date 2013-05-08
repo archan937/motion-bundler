@@ -79,16 +79,16 @@ module Unit
 
             assert_equal({
               __FILE__ => [
-                File.expand_path("../../../lib/a.rb", __FILE__),
-                File.expand_path("../../../lib/b.rb", __FILE__),
-                File.expand_path("../../../lib/c.rb", __FILE__)
+                lib_file("a.rb"),
+                lib_file("b.rb"),
+                lib_file("c.rb")
               ],
-              File  .expand_path("../../../lib/b.rb"  , __FILE__) => [
-                File.expand_path("../../../lib/b/a.rb", __FILE__),
-                File.expand_path("../../../lib/b/b.rb", __FILE__)
+              lib_file("b.rb") => [
+                lib_file("b/a.rb"),
+                lib_file("b/b.rb")
               ],
-              File  .expand_path("../../../lib/b/a.rb"  , __FILE__) => [
-                File.expand_path("../../../lib/b/a/a.rb", __FILE__)
+              lib_file("b/a.rb") => [
+                lib_file("b/a/a.rb")
               ]
             }, MotionBundler::Require::Tracer.log.instance_variable_get(:@log))
           end

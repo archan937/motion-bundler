@@ -5,7 +5,7 @@ module Unit
 
     describe "lib/motion-bundler/gem_ext.rb" do
       it "should required after having required MotionBundler" do
-        assert_equal true, $LOADED_FEATURES.include?(lib_file "motion-bundler/gem_ext.rb")
+        assert_equal true, $LOADED_FEATURES.include?(motion_bundler_file "motion-bundler/gem_ext.rb")
       end
 
       it "should override Motion::Project::Config#files_dependencies in order to tackle absolute paths" do

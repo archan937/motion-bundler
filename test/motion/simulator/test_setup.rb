@@ -1,7 +1,7 @@
 require File.expand_path("../../../test_helper", __FILE__)
 
 motion_gemfile <<-G
-gem "motion-bundler", :path => "#{lib_file ".."}"
+gem "motion-bundler", :path => "#{motion_bundler_file ".."}"
 group :motion do
   gem "slot_machine", :path => "#{gem_path "slot_machine"}"
 end
@@ -23,9 +23,9 @@ module Motion
           Motion::Project::App.any_instance.expects(:files).returns files
           Motion::Project::App.any_instance.expects(:files=).with([
             colorize,
-            lib_file("motion-bundler/simulator/boot.rb"),
-            lib_file("motion-bundler/simulator/console.rb"),
-            lib_file("motion-bundler/simulator/core_ext.rb"),
+            motion_bundler_file("motion-bundler/simulator/boot.rb"),
+            motion_bundler_file("motion-bundler/simulator/console.rb"),
+            motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
             gem_path("slot_machine/lib/slot.rb"),
             gem_path("slot_machine/lib/slot_machine.rb"),
             gem_path("slot_machine/lib/slot_machine/slot.rb"),
@@ -34,17 +34,18 @@ module Motion
             gem_path("slot_machine/lib/slots.rb"),
             gem_path("slot_machine/lib/time_slot.rb"),
             gem_path("slot_machine/lib/time_slots.rb"),
+            MotionBundler::MOTION_BUNDLER_FILE,
             "/Users/paulengel/foo.rb",
             "/Users/paulengel/bar.rb"
           ])
           Motion::Project::App.any_instance.expects(:files_dependencies).with(
-            lib_file("motion-bundler/simulator/boot.rb") => [
-              lib_file("motion-bundler/simulator/core_ext.rb"),
+            motion_bundler_file("motion-bundler/simulator/boot.rb") => [
+              motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
               colorize,
-              lib_file("motion-bundler/simulator/console.rb")
+              motion_bundler_file("motion-bundler/simulator/console.rb")
             ],
             gem_path("slot_machine/lib/slot_machine.rb") => [
-              lib_file("motion-bundler/simulator/boot.rb"),
+              motion_bundler_file("motion-bundler/simulator/boot.rb"),
               gem_path("slot_machine/lib/slot_machine/version.rb"),
               gem_path("slot_machine/lib/slot_machine/slot.rb"),
               gem_path("slot_machine/lib/slot_machine/slots.rb"),

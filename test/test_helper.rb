@@ -21,12 +21,16 @@ class MiniTest::Unit::TestCase
   end
 end
 
-def lib_file(path)
+def motion_bundler_file(path)
   File.expand_path "../../lib/#{path}", __FILE__
 end
 
 def gem_path(name)
   File.expand_path "../gems/#{name}", __FILE__
+end
+
+def lib_file(path)
+  File.expand_path "../lib/#{path}", __FILE__
 end
 
 def mocks_dir
