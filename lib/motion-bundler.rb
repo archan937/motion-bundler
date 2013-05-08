@@ -1,5 +1,6 @@
 require "motion-bundler/core_ext"
 require "motion-bundler/gem_ext"
+require "motion-bundler/config"
 require "motion-bundler/require"
 require "motion-bundler/version"
 
@@ -16,7 +17,11 @@ module MotionBundler
       default_files.each do |file|
         require file
       end
-      yield if block_given?
+      if block_given?
+        config = Config.new
+        yield config
+        config.requires.each{|file| require file, "APP"}
+      end
     end
     write_motion_bundler
   end
@@ -27,10 +32,15 @@ module MotionBundler
     end
     Motion::Project::App.setup do |app|
       app.files = begin
-        Require.files + app.files - ["BUNDLER", __FILE__]
+        Require.files + app.files - ["APP", "BUNDLER", __FILE__]
       end
       app.files_dependencies(
         Require.files_dependencies.tap do |dependencies|
+          if app_files = dependencies.delete("APP")
+            default_file = default_files.first
+            dependencies[default_file] ||= []
+            dependencies[default_file].concat app_files
+          end
           (dependencies.delete("BUNDLER") || []).each do |file|
             dependencies[file] ||= []
             dependencies[file] = default_files + dependencies[file]

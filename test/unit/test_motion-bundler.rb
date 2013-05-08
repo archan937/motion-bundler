@@ -63,7 +63,7 @@ module Unit
           object.expects :do_something
 
           Bundler.expects(:require).with(:motion)
-          MotionBundler.setup do
+          MotionBundler.setup do |app|
             object.do_something
           end
 
@@ -87,10 +87,12 @@ module Unit
             motion_bundler_file("motion-bundler/simulator/boot.rb"),
             motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
             motion_bundler_file("motion-bundler/simulator/motion-bundler.rb"),
+            "APP",
             "BUNDLER",
             "gems/foo-0.1.0/lib/foo.rb",
             "gems/foo-0.1.0/lib/foo/bar.rb",
-            "gems/foo-0.1.0/lib/foo/version.rb"
+            "gems/foo-0.1.0/lib/foo/version.rb",
+            "ruby/foo.rb"
           ]
           MotionBundler::Require.expects(:files_dependencies).returns({
             motion_bundler_file("motion-bundler.rb") => [
@@ -100,6 +102,8 @@ module Unit
               motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
               motion_bundler_file("motion-bundler/simulator/motion-bundler.rb")
             ],
+            "APP" => [
+              "ruby/foo.rb"
             ],
             "BUNDLER" => [
               "gems/foo-0.1.0/lib/foo.rb"
@@ -118,13 +122,15 @@ module Unit
             "gems/foo-0.1.0/lib/foo.rb",
             "gems/foo-0.1.0/lib/foo/bar.rb",
             "gems/foo-0.1.0/lib/foo/version.rb",
+            "ruby/foo.rb",
             "delegate.rb",
             "controller.rb"
           ])
           Motion::Project::App.any_instance.expects(:files_dependencies).with({
             motion_bundler_file("motion-bundler/simulator/boot.rb") => [
               motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
-              motion_bundler_file("motion-bundler/simulator/motion-bundler.rb")
+              motion_bundler_file("motion-bundler/simulator/motion-bundler.rb"),
+              "ruby/foo.rb"
             ],
             "gems/foo-0.1.0/lib/foo.rb" => [
               motion_bundler_file("motion-bundler/simulator/boot.rb"),

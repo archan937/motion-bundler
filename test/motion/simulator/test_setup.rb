@@ -34,6 +34,8 @@ module Motion
             gem_path("slot_machine/lib/slots.rb"),
             gem_path("slot_machine/lib/time_slot.rb"),
             gem_path("slot_machine/lib/time_slots.rb"),
+            lib_file("a.rb"),
+            lib_file("b/a/a.rb"),
             MotionBundler::MOTION_BUNDLER_FILE,
             "/Users/paulengel/foo.rb",
             "/Users/paulengel/bar.rb"
@@ -42,7 +44,9 @@ module Motion
             motion_bundler_file("motion-bundler/simulator/boot.rb") => [
               motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
               colorize,
-              motion_bundler_file("motion-bundler/simulator/console.rb")
+              motion_bundler_file("motion-bundler/simulator/console.rb"),
+              lib_file("a.rb"),
+              lib_file("b/a/a.rb")
             ],
             gem_path("slot_machine/lib/slot_machine.rb") => [
               motion_bundler_file("motion-bundler/simulator/boot.rb"),
@@ -56,7 +60,11 @@ module Motion
             ]
           )
 
-          MotionBundler.setup
+          MotionBundler.setup do |app|
+            app.require "a"
+            app.require "b/a/a"
+          end
+
           assert SlotMachine
         end
       end
