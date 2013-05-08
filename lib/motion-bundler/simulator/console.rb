@@ -4,16 +4,22 @@ module MotionBundler
 
       class Warning
         def print
+          if require_statement = [:require, :require_relative, :load, :autoload].include?(@method)
+            return if MotionBundler::REQUIRED.include? @args.last
+          end
+
           warning = "Warning Called `#{[@object, @method].compact.join "."}"
           warning += " #{@args.collect(&:inspect).join ", "}" unless @args.nil? || @args.empty?
           warning += "`"
           warning = warning.yellow
-          if [:require, :require_relative, :load, :autoload].include? @method
+
+          if require_statement
             warning += "\nAdd within setup block: ".yellow
             warning += "require \"#{@args.last}\"".green
           elsif @message
             warning += "\n#{@message}".green
           end
+
           puts "   #{warning.gsub("\n", "\n" + (" " * 11))}"
         end
       private

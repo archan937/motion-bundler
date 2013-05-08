@@ -25,6 +25,38 @@ module Unit
         assert_equal [lib_file("motion-bundler/device/boot.rb")], MotionBundler.default_files
       end
 
+      it "should be able to touch MotionBundler::MOTION_BUNDLER_FILE" do
+        File.expects(:open).with(MotionBundler::MOTION_BUNDLER_FILE, "w")
+        MotionBundler.send :touch_motion_bundler
+      end
+
+      it "should be able to write to MotionBundler::MOTION_BUNDLER_FILE" do
+        MotionBundler::Require.expects(:requires).returns("foo.rb" => ["bar"])
+        File.any_instance.expects(:<<).with <<-RUBY_CODE.gsub("          ", "")
+          module MotionBundler
+            REQUIRED = [
+              "bar"
+            ]
+          end
+        RUBY_CODE
+        MotionBundler.send :write_motion_bundler
+
+        MotionBundler::Require.expects(:requires).returns("foo.rb" => ["fubar/foo/bar", "fubar/foo/baz", "fubar/foo/qux"])
+        File.any_instance.expects(:<<).with <<-RUBY_CODE.gsub("          ", "")
+          module MotionBundler
+            REQUIRED = [
+              "fubar/foo/bar",
+              "fubar/foo/baz",
+              "fubar/foo/qux"
+            ]
+          end
+        RUBY_CODE
+        MotionBundler.send :write_motion_bundler
+
+        File.expects(:open).with(MotionBundler::MOTION_BUNDLER_FILE, "w")
+        MotionBundler.send :write_motion_bundler
+      end
+
       describe "calling `setup`" do
         it "should require the :motion Bundler group and trace requires" do
           object = mock "object"
@@ -36,6 +68,8 @@ module Unit
           end
 
           MotionBundler.expects(:trace_require)
+          MotionBundler.expects(:touch_motion_bundler)
+          MotionBundler.expects(:write_motion_bundler)
           MotionBundler.setup
         end
 

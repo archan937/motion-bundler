@@ -27,9 +27,9 @@ module MotionBundler
 
         def require_hook
           @require_hook ||= proc do
-            def require_with_mb_trace(path, _caller = nil)
+            def require_with_mb_trace(path, _caller = nil, _path = nil)
               result = nil
-              MotionBundler::Require::Tracer.log.register(_caller || caller[0], path) do
+              MotionBundler::Require::Tracer.log.register(_caller || caller[0], _path || path) do
                 result = require_without_mb_trace path
               end
               result
@@ -43,7 +43,7 @@ module MotionBundler
           @require_relative_hook ||= proc do
             def require_relative_with_mb_trace(path)
               caller[0].match(/^(.*\.rb)\b/)
-              require_with_mb_trace File.expand_path("../#{path}", $1), caller[0]
+              require_with_mb_trace File.expand_path("../#{path}", $1), caller[0], path
             end
             alias :require_relative_without_mb_trace :require_relative
             alias :require_relative :require_relative_with_mb_trace

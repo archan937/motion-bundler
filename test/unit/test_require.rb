@@ -30,12 +30,15 @@ module Unit
         end
       end
 
-      it "should return log files and files_dependencies" do
+      it "should return log files, files_dependencies and requires" do
         MotionBundler::Require::Tracer.log.expects(:files)
         MotionBundler::Require.files
 
         MotionBundler::Require::Tracer.log.expects(:files_dependencies)
         MotionBundler::Require.files_dependencies
+
+        MotionBundler::Require::Tracer.log.expects(:requires)
+        MotionBundler::Require.requires
       end
     end
 

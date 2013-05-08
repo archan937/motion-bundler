@@ -6,6 +6,15 @@ module Unit
     class TestConsole < MiniTest::Unit::TestCase
 
       describe MotionBundler::Simulator::Console do
+        before do
+          MotionBundler.send :remove_const, :REQUIRED if defined?(MotionBundler::REQUIRED)
+          MotionBundler::REQUIRED = ["baz"]
+        end
+
+        after do
+          MotionBundler.send :remove_const, :REQUIRED
+        end
+
         it "should print warnings as expected" do
           String.class_eval do
             alias :yellow :to_s
@@ -14,6 +23,11 @@ module Unit
           assert_output "   Warning Called `require \"foo\"`\n           Add within setup block: require \"foo\"\n" do
             MotionBundler::Simulator::Console.warn do
               require "foo"
+            end
+          end
+          assert_output "" do
+            MotionBundler::Simulator::Console.warn do
+              require "baz"
             end
           end
           assert_output "   Warning Called `require_relative \"foo\"`\n           Add within setup block: require \"foo\"\n" do

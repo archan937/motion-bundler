@@ -14,6 +14,11 @@ class MiniTest::Unit::TestCase
   def setup
     ENV["MB_SILENCE_CORE"] = "false"
   end
+  def teardown
+    if File.exists?(file = MotionBundler::MOTION_BUNDLER_FILE)
+      File.delete file
+    end
+  end
 end
 
 def lib_file(path)

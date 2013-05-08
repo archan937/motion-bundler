@@ -25,5 +25,9 @@ module MotionBundler
       Tracer.log.files_dependencies
     end
 
+    def requires
+      Tracer.log.requires
+    end
+
   end
 end

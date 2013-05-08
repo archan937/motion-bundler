@@ -1,6 +1,7 @@
 .DS_Store
 .bundle
 .rvmrc
+.motion-bundler.rb
 Gemfile.lock
 coverage
 doc
