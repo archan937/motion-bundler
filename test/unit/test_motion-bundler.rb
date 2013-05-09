@@ -59,12 +59,9 @@ module Unit
 
       describe "calling `setup`" do
         it "should require the :motion Bundler group and trace requires" do
-          object = mock "object"
-          object.expects :do_something
-
           Bundler.expects(:require).with(:motion)
           MotionBundler.setup do |app|
-            object.do_something
+            app.require "foo"
           end
 
           MotionBundler.expects(:trace_require)

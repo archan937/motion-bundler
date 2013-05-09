@@ -16,4 +16,5 @@ MotionBundler.setup do |app|
   app.require "stringio"
   app.require "strscan"
   app.require "zlib"
+  app.require "httparty"
 end

@@ -1,6 +1,7 @@
 require "stringio"
 require "strscan"
 require "zlib"
+require "httparty"
 
 class AppController < UIViewController
   def viewDidLoad
@@ -27,6 +28,10 @@ class AppController < UIViewController
     data = "x\234\355\301\001\001\000\000\000\200\220\376\257\356\b\n#{"\000" * 31}\030\200\000\000\001"
     zipped = Zlib::Inflate.inflate data
     p zipped == ("\000" * 32 * 1024)
+
+    # Testing (mocked) HTTParty
+
+    p HTTParty.hi!
 
   end
 end

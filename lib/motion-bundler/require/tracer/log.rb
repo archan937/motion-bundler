@@ -31,10 +31,10 @@ module MotionBundler
             end
           end
 
-          if loaded_feature.nil?
-            @log.delete file if dependencies.empty?
-          else
+          if loaded_feature
             dependencies.insert index, loaded_feature
+          else
+            @log.delete file if dependencies.empty?
           end
 
           true
