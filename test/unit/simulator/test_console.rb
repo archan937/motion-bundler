@@ -20,7 +20,7 @@ module Unit
             alias :yellow :to_s
             alias :green :to_s
           end
-          assert_output "   Warning Called `require \"foo\"`\n           Add within setup block: require \"foo\"\n" do
+          assert_output "   Warning Called `require \"foo\"`\n           Add within setup block: app.require \"foo\"\n" do
             MotionBundler::Simulator::Console.warn do
               require "foo"
             end
@@ -30,17 +30,17 @@ module Unit
               require "baz"
             end
           end
-          assert_output "   Warning Called `require_relative \"foo\"`\n           Add within setup block: require \"foo\"\n" do
+          assert_output "   Warning Called `require_relative \"foo\"`\n           Add within setup block: app.require \"foo\"\n" do
             MotionBundler::Simulator::Console.warn do
               require_relative "foo"
             end
           end
-          assert_output "   Warning Called `load \"foo\"`\n           Add within setup block: require \"foo\"\n" do
+          assert_output "   Warning Called `load \"foo\"`\n           Add within setup block: app.require \"foo\"\n" do
             MotionBundler::Simulator::Console.warn do
               load "foo"
             end
           end
-          assert_output "   Warning Called `autoload :Foo, \"foo\"`\n           Add within setup block: require \"foo\"\n" do
+          assert_output "   Warning Called `autoload :Foo, \"foo\"`\n           Add within setup block: app.require \"foo\"\n" do
             MotionBundler::Simulator::Console.warn do
               autoload :Foo, "foo"
             end

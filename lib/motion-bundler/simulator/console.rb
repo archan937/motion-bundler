@@ -15,7 +15,7 @@ module MotionBundler
 
           if require_statement
             warning += "\nAdd within setup block: ".yellow
-            warning += "require \"#{@args.last}\"".green
+            warning += "app.require \"#{@args.last}\"".green
           elsif @message
             warning += "\n#{@message}".green
           end
