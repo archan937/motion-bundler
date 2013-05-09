@@ -14,7 +14,7 @@ module Unit
             assert_equal true, Kernel.respond_to?(:require_with_mb_mock)
             assert_equal true, Object.respond_to?(:require_with_mb_mock)
 
-            MotionBundler::Require::Mocker.expects(:resolve).with("a").returns "a"
+            MotionBundler::Require.expects(:resolve).with("a").returns "a"
             require "a"
 
             MotionBundler::Require::Mocker.unhook

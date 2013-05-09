@@ -1,11 +1,11 @@
 require "motion-bundler/require/mocker/hooks"
-require "motion-bundler/require/mocker/paths"
+require "motion-bundler/require/mocker/dirs"
 
 module MotionBundler
   module Require
     module Mocker
       include Hooks
-      include Paths
+      include Dirs
       extend self
 
       def yield

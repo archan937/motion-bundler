@@ -72,23 +72,23 @@ module Unit
             assert_equal({}, MotionBundler::Require::Tracer.log.instance_variable_get(:@log))
 
             MotionBundler::Require::Tracer.yield do
-              require "a"
-              require "b"
-              require "c"
+              require "d/a"
+              require "d/b"
+              require "d/c"
             end
 
             assert_equal({
               __FILE__ => [
-                lib_file("a.rb"),
-                lib_file("b.rb"),
-                lib_file("c.rb")
+                lib_file("d/a.rb"),
+                lib_file("d/b.rb"),
+                lib_file("d/c.rb")
               ],
-              lib_file("b.rb") => [
-                lib_file("b/a.rb"),
-                lib_file("b/b.rb")
+              lib_file("d/b.rb") => [
+                lib_file("d/b/a.rb"),
+                lib_file("d/b/b.rb")
               ],
-              lib_file("b/a.rb") => [
-                lib_file("b/a/a.rb")
+              lib_file("d/b/a.rb") => [
+                lib_file("d/b/a/a.rb")
               ]
             }, MotionBundler::Require::Tracer.log.instance_variable_get(:@log))
           end

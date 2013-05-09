@@ -1,8 +1,10 @@
 require "motion-bundler/require/tracer"
 require "motion-bundler/require/mocker"
+require "motion-bundler/require/resolve"
 
 module MotionBundler
   module Require
+    include Resolve
     extend self
 
     def trace

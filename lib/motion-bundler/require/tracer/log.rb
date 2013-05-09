@@ -23,9 +23,20 @@ module MotionBundler
           dependencies = (@log[file] ||= [])
           index = dependencies.size
 
-          yield
+          loaded_feature = begin
+            if (result = yield).is_a?(Hash)
+              result[:required]
+            else
+              loaded_features.last
+            end
+          end
 
-          dependencies.insert index, loaded_features.last
+          if loaded_feature.nil?
+            @log.delete file if dependencies.empty?
+          else
+            dependencies.insert index, loaded_feature
+          end
+
           true
         end
 

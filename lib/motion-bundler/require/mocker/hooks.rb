@@ -18,7 +18,7 @@ module MotionBundler
         def require_hook
           @require_hook ||= proc do
             def require_with_mb_mock(path)
-              require_without_mb_mock MotionBundler::Require::Mocker.resolve(path)
+              require_without_mb_mock MotionBundler::Require.resolve(path)
             end
             alias :require_without_mb_mock :require
             alias :require :require_with_mb_mock
