@@ -40,10 +40,8 @@ module MotionBundler
           @method = :autoload
           @args = args
         end
-        def object(object)
+        def call(object, method)
           @object = object
-        end
-        def method(method)
           @method = method
         end
         def message(message)

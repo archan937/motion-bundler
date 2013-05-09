@@ -47,8 +47,7 @@ module Unit
           end
           assert_output "   Warning Called `Foo.bar`\n           Don't do that!\n" do
             MotionBundler::Simulator::Console.warn do
-              object "Foo"
-              method :bar
+              call "Foo", :bar
               message "Don't do that!"
             end
           end

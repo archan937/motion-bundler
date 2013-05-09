@@ -8,48 +8,34 @@ end
 
 class Object
   def require(name)
-    console.warn do
-      require name
-    end
+    console.warn { require name }
   end
   def require_relative(string)
-    console.warn do
-      require_relative string
-    end
+    console.warn { require_relative string }
   end
   def load(filename, wrap=false)
-    console.warn do
-      load filename
-    end
+    console.warn { load filename }
   end
   alias :original_instance_eval :instance_eval
   def instance_eval(*args, &block)
     if block_given?
       original_instance_eval &block
     else
-      console.warn do
-        object self.class.name
-        method :instance_eval
-      end
+      console.warn { call self.class.name, :instance_eval }
     end
   end
 end
 
 class Module
   def autoload(mod, filename)
-    console.warn do
-      autoload mod, filename
-    end
+    console.warn { autoload mod, filename }
   end
   alias :original_class_eval :class_eval
   def class_eval(*args, &block)
     if block_given?
       original_class_eval &block
     else
-      console.warn do
-        object name
-        method :class_eval
-      end
+      console.warn { call name, :class_eval }
     end
   end
   alias :original_module_eval :module_eval
@@ -57,10 +43,7 @@ class Module
     if block_given?
       original_module_eval &block
     else
-      console.warn do
-        object name
-        method :module_eval
-      end
+      console.warn { call name, :module_eval }
     end
   end
 end
