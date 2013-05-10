@@ -37,6 +37,7 @@ module Unit
             REQUIRED = [
               "bar"
             ]
+            FILES_DEPENDENCIES = {}
           end
         RUBY_CODE
         MotionBundler.send :write_motion_bundler
@@ -49,6 +50,7 @@ module Unit
               "fubar/foo/baz",
               "fubar/foo/qux"
             ]
+            FILES_DEPENDENCIES = {}
           end
         RUBY_CODE
         MotionBundler.send :write_motion_bundler
@@ -91,7 +93,7 @@ module Unit
             "gems/foo-0.1.0/lib/foo/version.rb",
             "ruby/foo.rb"
           ]
-          MotionBundler::Require.expects(:files_dependencies).returns({
+          MotionBundler::Require.expects(:files_dependencies).twice.returns({
             motion_bundler_file("motion-bundler.rb") => [
               motion_bundler_file("motion-bundler/simulator/boot.rb")
             ],

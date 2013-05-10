@@ -76,9 +76,15 @@ private
   def write_motion_bundler
     File.open(MOTION_BUNDLER_FILE, "w") do |file|
       required = Require.requires.values.flatten
+      files_dependencies = Require.files_dependencies.tap do |dependencies|
+        if files = dependencies.delete(__FILE__)
+          dependencies["MOTION_BUNDLER"] = files
+        end
+      end
       file << <<-RUBY_CODE.gsub("        ", "")
         module MotionBundler
           REQUIRED = #{pretty_inspect required, 2}
+          FILES_DEPENDENCIES = #{pretty_inspect files_dependencies, 2}
         end
       RUBY_CODE
     end
@@ -90,11 +96,11 @@ private
       return "[]" if entries.empty?
       entries.each_with_index{|x, i| entries[i] = "#{x}," if i < entries.size - 1}
       ["[", entries, "]"].flatten.join "\n" + (" " * indent)
-    # elsif object.is_a?(Hash)
-    #   entries = object.collect{|k, v| "  #{k.inspect} => #{pretty_inspect v, indent + 2}"}
-    #   return "{}" if entries.empty?
-    #   entries.each_with_index{|x, i| entries[i] = "#{x}," if i < entries.size - 1}
-    #   ["{", entries, "}"].flatten.join "\n" + (" " * indent)
+    elsif object.is_a?(Hash)
+      entries = object.collect{|k, v| "  #{k.inspect} => #{pretty_inspect v, indent + 2}"}
+      return "{}" if entries.empty?
+      entries.each_with_index{|x, i| entries[i] = "#{x}," if i < entries.size - 1}
+      ["{", entries, "}"].flatten.join "\n" + (" " * indent)
     else
       object.inspect
     end
