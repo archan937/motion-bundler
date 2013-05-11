@@ -15,8 +15,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = MotionBundler::VERSION
 
-  gem.add_development_dependency "minitest"
-  gem.add_development_dependency "mocha"
+  gem.add_development_dependency "minitest", "4.6.2"
+  gem.add_development_dependency "mocha", "0.13.2"
   gem.add_development_dependency "rake"
 
   gem.add_dependency "colorize"
