@@ -49,7 +49,7 @@ module Unit
             require "cgi"
             assert_equal false, require("cgi")
 
-            trace_require do
+            MotionBundler.trace_require do
               MotionBundler::Require::Tracer.log.clear
               MotionBundler::Require.expects(:resolve).returns(nil)
               assert_equal({}, MotionBundler::Require::Tracer.log.files_dependencies)
