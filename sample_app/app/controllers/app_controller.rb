@@ -7,6 +7,7 @@ class AppController < UIViewController
   def viewDidLoad
 
     # Testing SlotMachine
+
     ts = TimeSlot.new 1015..1045
     p ts.match 10
     p ts.match 10, 5

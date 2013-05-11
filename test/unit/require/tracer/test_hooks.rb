@@ -44,27 +44,6 @@ module Unit
             assert_equal false, Kernel.respond_to?(:load_with_mb_trace)
             assert_equal false, Object.respond_to?(:load_with_mb_trace)
           end
-
-          it "should manually resolve required source file" do
-            require "cgi"
-            assert_equal false, require("cgi")
-
-            MotionBundler.trace_require do
-              MotionBundler::Require::Tracer.log.clear
-              MotionBundler::Require.expects(:resolve).returns(nil)
-              assert_equal({}, MotionBundler::Require::Tracer.log.files_dependencies)
-
-              assert_equal false, require("cgi")
-              assert_equal({}, MotionBundler::Require::Tracer.log.files_dependencies)
-
-              MotionBundler::Require::Tracer.log.clear
-              MotionBundler::Require.expects(:resolve).returns("foo/cgi.rb")
-              assert_equal({}, MotionBundler::Require::Tracer.log.files_dependencies)
-
-              assert_equal false, require("cgi")
-              assert_equal({__FILE__ => ["foo/cgi.rb"]}, MotionBundler::Require::Tracer.log.files_dependencies)
-            end
-          end
         end
 
       end

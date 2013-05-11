@@ -1,5 +1,6 @@
 require "motion-bundler/require/tracer"
 require "motion-bundler/require/mocker"
+require "motion-bundler/require/ripper"
 require "motion-bundler/require/resolve"
 
 module MotionBundler

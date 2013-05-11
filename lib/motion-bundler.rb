@@ -1,3 +1,4 @@
+require "bundler"
 require "motion-bundler/gem_ext"
 require "motion-bundler/config"
 require "motion-bundler/require"
@@ -8,45 +9,17 @@ module MotionBundler
 
   MOTION_BUNDLER_FILE = File.expand_path "./.motion-bundler.rb"
 
-  def setup
-    touch_motion_bundler
-    trace_require do
-      require MOTION_BUNDLER_FILE
-      Bundler.require :motion
-      default_files.each do |file|
-        require file
-      end
-      if block_given?
-        config = Config.new
-        yield config
-        config.requires.each{|file| require file, "APP"}
-      end
-    end
-    write_motion_bundler
-  end
-
-  def trace_require
-    Require.trace do
-      yield
-    end
+  def setup(&block)
     Motion::Project::App.setup do |app|
-      app.files = begin
-        Require.files + app.files - ["APP", "BUNDLER", __FILE__]
-      end
-      app.files_dependencies(
-        Require.files_dependencies.tap do |dependencies|
-          if app_files = dependencies.delete("APP")
-            default_file = default_files.first
-            dependencies[default_file] ||= []
-            dependencies[default_file].concat app_files
-          end
-          (dependencies.delete("BUNDLER") || []).each do |file|
-            dependencies[file] ||= []
-            dependencies[file] = default_files + dependencies[file]
-          end
-          dependencies.delete(__FILE__)
-        end
-      )
+      touch_motion_bundler
+
+      files, files_dependencies, required = app.files, {}, []
+      ripper_require files, files_dependencies, required
+      tracer_require files, files_dependencies, required, &block
+      app.files = files
+      app.files_dependencies files_dependencies
+
+      write_motion_bundler files, files_dependencies, required
     end
   end
 
@@ -72,18 +45,61 @@ private
     File.open(MOTION_BUNDLER_FILE, "w") {}
   end
 
-  def write_motion_bundler
+  def ripper_require(files, files_dependencies, required)
+    ripper = Require::Ripper.new *Dir["app/**/*.rb"].collect{|x| "./#{x}"}
+    files.concat ripper.files
+    files_dependencies.merge! ripper.files_dependencies
+    required.concat ripper.requires.values.flatten
+  end
+
+  def tracer_require(files, files_dependencies, required)
+    Require.trace do
+      require MOTION_BUNDLER_FILE
+      Bundler.require :motion
+      default_files.each do |file|
+        require file
+      end
+      if block_given?
+        config = Config.new
+        yield config
+        config.requires.each{|file| require file, "APP"}
+      end
+    end
+
+    files.replace(
+      (Require.files + files - ["APP", "BUNDLER", __FILE__]).uniq
+    )
+    files_dependencies.merge!(
+      Require.files_dependencies.tap do |dependencies|
+        if app_dependencies = dependencies.delete("APP")
+          default_file = default_files.first
+          dependencies[default_file] ||= []
+          dependencies[default_file].concat app_dependencies
+        end
+        (dependencies.delete("BUNDLER") || []).each do |file|
+          dependencies[file] ||= []
+          dependencies[file] = default_files + dependencies[file]
+        end
+        dependencies.delete(__FILE__)
+      end
+    )
+    required.concat Require.requires.values.flatten
+
+    true
+  end
+
+  def write_motion_bundler(files, files_dependencies, required)
     File.open(MOTION_BUNDLER_FILE, "w") do |file|
-      required = Require.requires.values.flatten
-      files_dependencies = Require.files_dependencies.tap do |dependencies|
-        if files = dependencies.delete(__FILE__)
-          dependencies["MOTION_BUNDLER"] = files
+      files_dependencies = files_dependencies.dup.tap do |dependencies|
+        if motion_bundler_dependencies = dependencies.delete(__FILE__)
+          dependencies["MOTION_BUNDLER"] = motion_bundler_dependencies
         end
       end
       file << <<-RUBY_CODE.gsub("        ", "")
         module MotionBundler
-          REQUIRED = #{pretty_inspect required, 2}
+          FILES = #{pretty_inspect files, 2}
           FILES_DEPENDENCIES = #{pretty_inspect files_dependencies, 2}
+          REQUIRED = #{pretty_inspect required, 2}
         end
       RUBY_CODE
     end

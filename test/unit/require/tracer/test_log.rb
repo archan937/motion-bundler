@@ -35,6 +35,9 @@ module Unit
                 end
                 loaded_features << "file2"
               end
+              @log.register "/Sources/lib/foo.rb:12", "qux" do
+                {:required => false}
+              end
               loaded_features << "file1"
             end
 
@@ -69,7 +72,8 @@ module Unit
               "/Sources/lib/file1.rb:47" => %w(file0),
               "/Sources/lib/file1.rb:129" => %w(file2),
               "/Sources/lib/file2.rb:1" => %w(file3),
-              "/Sources/lib/file2.rb:2" => %w(file4)
+              "/Sources/lib/file2.rb:2" => %w(file4),
+              "/Sources/lib/foo.rb:12" => %w(qux)
             }, @log.requires)
           end
         end

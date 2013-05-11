@@ -12,9 +12,4 @@ Motion::Project::App.setup do |app|
 end
 
 # Track and specify files and their mutual dependencies within the :motion Bundler group
-MotionBundler.setup do |app|
-  app.require "stringio"
-  app.require "strscan"
-  app.require "zlib"
-  app.require "httparty"
-end
+MotionBundler.setup
