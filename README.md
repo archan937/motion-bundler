@@ -46,6 +46,10 @@ Add `MotionBundler.setup` at the end of your `Rakefile`:
 
 Run `bundle` and then `rake` to run the application in your iOS-simulator. Voila! You're done ^^
 
+## More documentation
+
+Please consult the [GitHub repository Wiki pages](https://github.com/archan937/motion-bundler/wiki/Overview) for further information about MotionBundler.
+
 ## Huh? Haven't you written LockOMotion already?
 
 Yes, I did. But MotionBundler ...
@@ -54,10 +58,6 @@ Yes, I did. But MotionBundler ...
 * has been stripped down
 * has more code abstraction (and thus has much cleaner and readable code)
 * has a [test coverage percentage of 100%](https://travis-ci.org/archan937/motion-bundler)
-
-## More documentation
-
-Please consult the [GitHub repository Wiki pages](https://github.com/archan937/motion-bundler/wiki/Overview) for further information about MotionBundler.
 
 ## Contact me
 
