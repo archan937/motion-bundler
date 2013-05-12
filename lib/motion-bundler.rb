@@ -9,6 +9,10 @@ module MotionBundler
 
   MOTION_BUNDLER_FILE = File.expand_path "./.motion-bundler.rb"
 
+  def app_require(file)
+    app_requires << file
+  end
+
   def setup(&block)
     Motion::Project::App.setup do |app|
       touch_motion_bundler
@@ -16,6 +20,11 @@ module MotionBundler
       files, files_dependencies, required = app.files, {}, []
       ripper_require files, files_dependencies, required
       tracer_require files, files_dependencies, required, &block
+
+      files.uniq!
+      files_dependencies.each{|k, v| v.uniq!}
+      required.uniq!; required.sort!
+
       app.files = files
       app.files_dependencies files_dependencies
 
@@ -41,6 +50,10 @@ private
     ARGV
   end
 
+  def app_requires
+    @app_requires ||= []
+  end
+
   def touch_motion_bundler
     File.open(MOTION_BUNDLER_FILE, "w") {}
   end
@@ -58,6 +71,10 @@ private
       Bundler.require :motion
       default_files.each do |file|
         require file
+      end
+      app_requires.delete_if do |file|
+        require file, "APP"
+        true
       end
       if block_given?
         config = Config.new

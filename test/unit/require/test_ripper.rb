@@ -24,6 +24,10 @@ module Unit
           baz_builder.expects(:requires).returns []
           MotionBundler::Require::Ripper::Builder.expects(:new).with("./app/controllers/baz_controller.rb").returns baz_builder
 
+          qux_builder = mock "object"
+          qux_builder.expects(:requires).returns []
+          MotionBundler::Require::Ripper::Builder.expects(:new).with(File.expand_path("./app/controllers/qux.rb")).returns qux_builder
+
           MotionBundler::Require.expects(:resolve).with("stringio").returns("stdlib/stringio.rb")
           MotionBundler::Require.expects(:resolve).with("strscan").returns("mocks/strscan.rb")
           MotionBundler::Require.expects(:resolve).with("baz").returns("lib/baz.rb")
