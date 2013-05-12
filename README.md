@@ -57,7 +57,7 @@ Yes, I did. But MotionBundler ...
 
 ## More documentation
 
-Please consult the [GitHub repository Wiki pages](https://github.com/archan937/motion-bundler/wiki) for further information about MotionBundler.
+Please consult the [GitHub repository Wiki pages](https://github.com/archan937/motion-bundler/wiki/Overview) for further information about MotionBundler.
 
 ## Contact me
 
