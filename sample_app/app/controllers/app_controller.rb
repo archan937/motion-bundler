@@ -40,5 +40,13 @@ class AppController < UIViewController
     p Foo.foo!
     p Foo::Bar.bar!
 
+    # Testing at runtime require statement
+
+    file = "base64"
+    require file
+    enc = Base64.encode64("Send reinforcements!")
+    p enc
+    p Base64.decode64(enc)
+
   end
 end
