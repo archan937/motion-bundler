@@ -40,11 +40,11 @@ module Unit
 
           assert_equal([
             "./app/controllers/app_controller.rb",
-            "./app/controllers/foo_controller.rb",
-            File.expand_path("app/controllers/qux.rb"),
-            "lib/baz.rb",
+            "stdlib/stringio.rb",
             "mocks/strscan.rb",
-            "stdlib/stringio.rb"
+            "./app/controllers/foo_controller.rb",
+            "lib/baz.rb",
+            File.expand_path("app/controllers/qux.rb")
           ], ripper.files)
           assert_equal({
             "./app/controllers/app_controller.rb" => [

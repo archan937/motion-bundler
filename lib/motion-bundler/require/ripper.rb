@@ -6,15 +6,18 @@ module MotionBundler
 
       def initialize(*sources)
         @sources = sources
+        @files = Set.new
+        @files_dependencies = {}
+        @requires = {}
         parse
       end
 
       def files
-        (@log.keys + @log.values).flatten.sort.uniq
+        @files.to_a
       end
 
       def files_dependencies
-        @log.dup
+        @files_dependencies.dup
       end
 
       def requires
@@ -24,16 +27,16 @@ module MotionBundler
     private
 
       def parse
-        @log ||= {}
-        @requires ||= {}
         @sources.each do |source|
-          next if @log.include?(source)
+          next if @files_dependencies.include?(source)
           added_sources = []
 
           builder = Builder.new source
           builder.requires.each do |method, args|
-            (@log[source] ||= []) << begin
+            (@files_dependencies[source] ||= []) << begin
               (method == :require_relative ? File.expand_path("../#{args[0]}.rb", source) : Require.resolve(args[0])).tap do |file|
+                @files << source
+                @files << file
                 unless @sources.any?{|x| File.expand_path(x) == File.expand_path(file)}
                   if file.include?(File.expand_path("."))
                     added_sources << file

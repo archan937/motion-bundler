@@ -4,13 +4,27 @@ module MotionBundler
       class Log
 
         def initialize
-          @log = {}
+          @files = Set.new
+          @files_dependencies = {}
           @requires = {}
         end
 
         def clear
-          @log.clear
+          @files.clear
+          @files_dependencies.clear
           @requires.clear
+        end
+
+        def files
+          @files.to_a
+        end
+
+        def files_dependencies
+          @files_dependencies.dup
+        end
+
+        def requires
+          @requires.dup
         end
 
         def register(file, path)
@@ -20,7 +34,7 @@ module MotionBundler
           line = $1.include?("/bundler/") ? nil : $2
 
           (@requires[[file, line].compact.join(":")] ||= []) << path
-          dependencies = (@log[file] ||= [])
+          dependencies = (@files_dependencies[file] ||= [])
           index = dependencies.size
 
           loaded_feature = begin
@@ -32,24 +46,14 @@ module MotionBundler
           end
 
           if loaded_feature
+            @files << file unless @files.include? file
+            @files << loaded_feature
             dependencies.insert index, loaded_feature
           else
-            @log.delete file if dependencies.empty?
+            @files_dependencies.delete file if dependencies.empty?
           end
 
           true
-        end
-
-        def files
-          (@log.keys + @log.values).flatten.sort.uniq
-        end
-
-        def files_dependencies
-          @log.dup
-        end
-
-        def requires
-          @requires.dup
         end
 
       private

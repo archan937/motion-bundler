@@ -69,7 +69,7 @@ module Unit
 
         describe "tracing require statements" do
           it "should log dependencies as expected" do
-            assert_equal({}, MotionBundler::Require::Tracer.log.instance_variable_get(:@log))
+            assert_equal({}, MotionBundler::Require::Tracer.log.instance_variable_get(:@files_dependencies))
 
             MotionBundler::Require::Tracer.yield do
               require "d/a"
@@ -90,7 +90,7 @@ module Unit
               lib_file("d/b/a.rb") => [
                 lib_file("d/b/a/a.rb")
               ]
-            }, MotionBundler::Require::Tracer.log.instance_variable_get(:@log))
+            }, MotionBundler::Require::Tracer.log.instance_variable_get(:@files_dependencies))
           end
         end
 

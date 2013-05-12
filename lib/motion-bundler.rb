@@ -21,10 +21,6 @@ module MotionBundler
       ripper_require files, files_dependencies, required
       tracer_require files, files_dependencies, required, &block
 
-      files.uniq!
-      files_dependencies.each{|k, v| v.uniq!}
-      required.uniq!; required.sort!
-
       app.files = files
       app.files_dependencies files_dependencies
 
@@ -60,18 +56,21 @@ private
 
   def ripper_require(files, files_dependencies, required)
     ripper = Require::Ripper.new *Dir["app/**/*.rb"].collect{|x| "./#{x}"}
-    files.concat ripper.files
-    files_dependencies.merge! ripper.files_dependencies
-    required.concat ripper.requires.values.flatten
+
+    files.replace(ripper.files + files).uniq!
+    files_dependencies.merge!(ripper.files_dependencies)
+
+    files_dependencies.each{|k, v| v.uniq!}
+    required.concat(ripper.requires.values.flatten).uniq!; required.sort!
   end
 
   def tracer_require(files, files_dependencies, required)
     Require.trace do
       require MOTION_BUNDLER_FILE
-      Bundler.require :motion
       default_files.each do |file|
         require file
       end
+      Bundler.require :motion
       app_requires.delete_if do |file|
         require file, "APP"
         true
@@ -84,23 +83,21 @@ private
     end
 
     files.replace(
-      (Require.files + files - ["APP", "BUNDLER", __FILE__]).uniq
-    )
+      Require.files + files - ["APP", "BUNDLER", __FILE__]
+    ).uniq!
     files_dependencies.merge!(
       Require.files_dependencies.tap do |dependencies|
-        if app_dependencies = dependencies.delete("APP")
-          default_file = default_files.first
-          dependencies[default_file] ||= []
-          dependencies[default_file].concat app_dependencies
-        end
         (dependencies.delete("BUNDLER") || []).each do |file|
           dependencies[file] ||= []
           dependencies[file] = default_files + dependencies[file]
         end
+        dependencies.delete("APP")
         dependencies.delete(__FILE__)
       end
     )
-    required.concat Require.requires.values.flatten
+
+    files_dependencies.each{|k, v| v.uniq!}
+    required.concat(Require.requires.values.flatten).uniq!; required.sort!
 
     true
   end

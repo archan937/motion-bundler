@@ -11,10 +11,12 @@ module Unit
           end
 
           it "should be able to clear it's log" do
-            @log.instance_variable_set :@log, {"a" => "b"}
+            @log.instance_variable_set :@files, %w(a b)
+            @log.instance_variable_set :@files_dependencies, {"a" => "b"}
             @log.instance_variable_set :@requires, {"c" => "d"}
             @log.clear
-            assert_equal true, @log.instance_variable_get(:@log).empty?
+            assert_equal true, @log.instance_variable_get(:@files).empty?
+            assert_equal true, @log.instance_variable_get(:@files_dependencies).empty?
             assert_equal true, @log.instance_variable_get(:@requires).empty?
           end
 
@@ -22,7 +24,8 @@ module Unit
             loaded_features = %w(foo1 foo2 foo3)
             @log.expects(:loaded_features).at_least_once.returns loaded_features
 
-            @log.instance_variable_set :@log, {"/Sources/lib/file1.rb" => ["file0"]}
+            @log.instance_variable_set :@files, %w(/Sources/lib/file1.rb file0)
+            @log.instance_variable_set :@files_dependencies, {"/Sources/lib/file1.rb" => ["file0"]}
             @log.instance_variable_set :@requires, {"/Sources/lib/file1.rb:47" => ["file0"]}
 
             @log.register "/.rvm/gems/bundler/bundler.rb:63", "foo" do
@@ -45,20 +48,20 @@ module Unit
               "BUNDLER" => %w(file1),
               "/Sources/lib/file1.rb" => %w(file0 file2),
               "/Sources/lib/file2.rb" => %w(file3 file4)
-            }, @log.instance_variable_get(:@log))
+            }, @log.instance_variable_get(:@files_dependencies))
 
             assert_equal %w(
               /Sources/lib/file1.rb
-              /Sources/lib/file2.rb
-              BUNDLER
               file0
-              file1
-              file2
-              file3
+              /Sources/lib/file2.rb
               file4
+              file3
+              file2
+              BUNDLER
+              file1
             ), @log.files
 
-            assert_equal true, @log.files_dependencies.object_id != @log.instance_variable_get(:@log).object_id
+            assert_equal true, @log.files_dependencies.object_id != @log.instance_variable_get(:@files_dependencies).object_id
             assert_equal true, @log.requires.object_id != @log.instance_variable_get(:@requires).object_id
 
             assert_equal({

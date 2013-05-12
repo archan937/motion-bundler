@@ -128,8 +128,7 @@ module Unit
           Motion::Project::App.any_instance.expects(:files_dependencies).with({
             motion_bundler_file("motion-bundler/simulator/boot.rb") => [
               motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
-              motion_bundler_file("motion-bundler/simulator/motion-bundler.rb"),
-              "ruby/foo.rb"
+              motion_bundler_file("motion-bundler/simulator/motion-bundler.rb")
             ],
             "gems/foo-0.1.0/lib/foo.rb" => [
               motion_bundler_file("motion-bundler/simulator/boot.rb"),
