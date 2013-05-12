@@ -2,6 +2,7 @@ require "stringio"
 require "strscan"
 require "zlib"
 require "httparty"
+require_relative "../../lib/foo"
 
 class AppController < UIViewController
   def viewDidLoad
@@ -33,6 +34,11 @@ class AppController < UIViewController
     # Testing (mocked) HTTParty
 
     p HTTParty.hi!
+
+    # Testing Foo and Foo::Bar
+
+    p Foo.foo!
+    p Foo::Bar.bar!
 
   end
 end
