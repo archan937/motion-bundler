@@ -12,9 +12,12 @@ module MotionBundler
       end
 
       def yield
+        verbose = $VERBOSE
+        $VERBOSE = nil
         start
         yield
       ensure
+        $VERBOSE = verbose
         stop
       end
 
