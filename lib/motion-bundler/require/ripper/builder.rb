@@ -22,7 +22,9 @@ module MotionBundler
         def on_command(command, args)
           type, name, position = command
           if %w(require require_relative).include? name
-            @requires << [name.to_sym, extract_arguments(args)]
+            unless (args = extract_arguments(args)).empty?
+              @requires << [name.to_sym, args]
+            end
           end
         end
 
