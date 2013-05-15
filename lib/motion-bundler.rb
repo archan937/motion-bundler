@@ -36,8 +36,8 @@ module MotionBundler
     argv.include? "device"
   end
 
-  def default_files
-    [File.expand_path("../motion-bundler/#{simulator? ? "simulator" : "device"}/boot.rb", __FILE__)]
+  def boot_file
+    File.expand_path "../motion-bundler/#{simulator? ? "simulator" : "device"}/boot.rb", __FILE__
   end
 
 private
@@ -67,9 +67,7 @@ private
   def tracer_require(files, files_dependencies, required)
     Require.trace do
       require MOTION_BUNDLER_FILE
-      default_files.each do |file|
-        require file
-      end
+      require boot_file
       Bundler.require :motion
       app_requires.delete_if do |file|
         require file, "APP"
@@ -88,8 +86,7 @@ private
     files_dependencies.merge!(
       Require.files_dependencies.tap do |dependencies|
         (dependencies.delete("BUNDLER") || []).each do |file|
-          dependencies[file] ||= []
-          dependencies[file] = default_files + dependencies[file]
+          (dependencies[file] ||= []).unshift boot_file
         end
         dependencies.delete("APP")
         dependencies.delete(__FILE__)

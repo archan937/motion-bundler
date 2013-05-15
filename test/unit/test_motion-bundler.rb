@@ -19,10 +19,10 @@ module Unit
 
       it "should determine Motion::Project::App default files" do
         MotionBundler.expects(:simulator?).returns(true)
-        assert_equal [motion_bundler_file("motion-bundler/simulator/boot.rb")], MotionBundler.default_files
+        assert_equal motion_bundler_file("motion-bundler/simulator/boot.rb"), MotionBundler.boot_file
 
         MotionBundler.expects(:simulator?).returns(false)
-        assert_equal [motion_bundler_file("motion-bundler/device/boot.rb")], MotionBundler.default_files
+        assert_equal motion_bundler_file("motion-bundler/device/boot.rb"), MotionBundler.boot_file
       end
 
       it "should be able to touch MotionBundler::MOTION_BUNDLER_FILE" do

@@ -1,7 +1,7 @@
 PATH
   remote: /Users/paulengel/Sources/motion-bundler
   specs:
-    motion-bundler (0.1.0)
+    motion-bundler (0.1.1)
       colorize
 
 PATH
