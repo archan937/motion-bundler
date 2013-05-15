@@ -1,5 +1,9 @@
 = MotionBundler CHANGELOG
 
+== Version 0.1.1 (May 15, 2013)
+
+* Fixed device/core_ext.rb when running `rake device`
+
 == Version 0.1.0 (May 12, 2013)
 
 * Initial release
