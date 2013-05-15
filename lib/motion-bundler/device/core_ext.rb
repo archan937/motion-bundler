@@ -1,3 +1,5 @@
+unless ENV["MB_SILENCE_CORE"] == "false"
+
 module Kernel
   def require(name)
   end
@@ -19,4 +21,6 @@ end
 class Module
   def autoload(mod, filename)
   end
+end
+
 end

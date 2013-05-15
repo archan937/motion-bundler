@@ -5,6 +5,10 @@ module Motion
     class TestCoreExt < MiniTest::Unit::TestCase
 
       describe "lib/motion-bundler/device/core_ext.rb" do
+        before do
+          ENV["MB_SILENCE_CORE"] = "true"
+        end
+
         it "should ignore require statements without a warning" do
           MotionBundler.expects(:simulator?).returns false
           last_loaded_feature = nil
