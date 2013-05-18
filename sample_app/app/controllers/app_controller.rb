@@ -20,6 +20,7 @@ class AppController < UIViewController
     p s.read(17)
 
     # Testing StringScanner
+
     s = StringScanner.new "ab"
     p s.getch
     p s.getch
