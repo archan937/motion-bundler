@@ -1,5 +1,12 @@
 = MotionBundler CHANGELOG
 
+== Version 0.1.2 (May 20, 2013)
+
+* Updated mocked HTTParty module:
+
+  * Support passing block when sending request
+  * Support asynchronous requests
+
 == Version 0.1.1 (May 15, 2013)
 
 * Fixed device/core_ext.rb when running `rake device`
