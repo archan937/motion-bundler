@@ -18,24 +18,24 @@ module HTTParty
   end
 
   def get(path, options = {}, &block)
-    send_request path, :get
+    send_request path, :get, options, &block
   end
 
   def post(path, options = {}, &block)
-    send_request path, :post
+    send_request path, :post, options, &block
   end
 
   def put(path, options = {}, &block)
-    send_request path, :put
+    send_request path, :put, options, &block
   end
 
   def delete(path, options = {}, &block)
-    send_request path, :delete
+    send_request path, :delete, options, &block
   end
 
 private
 
-  def send_request(path, method, options = {})
+  def send_request(path, method, options = {}, &block)
     path   = "#{@base_uri}/#{path}" if @base_uri && !path.match(/^\w+:\/\//)
     path   = path.stringByAddingPercentEscapesUsingEncoding NSUTF8StringEncoding
     method = method.to_s.upcase
@@ -63,9 +63,17 @@ private
 
     response = Pointer.new :object
     error    = Pointer.new :object
-    data     = NSURLConnection.sendSynchronousRequest request, returningResponse: response, error: error
 
-    HTTParty::Response.new response, data, {:format => @format, :error => error}
+    if options[:async]
+      queue = NSOperationQueue.alloc.init
+      NSURLConnection.sendAsynchronousRequest request, queue: queue, completionHandler: proc { |response, data, error|
+        block.call HTTParty::Response.new(response, data, {:format => @format || options[:format], :error => error})
+      }
+    else
+      data = NSURLConnection.sendSynchronousRequest request, returningResponse: response, error: error
+      response = HTTParty::Response.new(response.value, data, {:format => @format || options[:format], :error => error})
+      block_given? ? block.call(response) : response
+    end
   end
 
   def payload_to_query_string(payload_hash)
@@ -98,7 +106,7 @@ module HTTParty
   class Response
 
     def initialize(response, data, options = {})
-      @cached_response = NSCachedURLResponse.alloc.initWithResponse response.value, data: data
+      @cached_response = NSCachedURLResponse.alloc.initWithResponse response, data: data
       @options = options
     end
 
