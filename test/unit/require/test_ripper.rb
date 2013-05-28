@@ -16,7 +16,8 @@ module Unit
           foo_builder = mock "object"
           foo_builder.expects(:requires).returns [
             [:require, ["baz"]],
-            [:require_relative, ["qux"]]
+            [:require_relative, ["qux"]],
+            [:require_relative, ["bar"]]
           ]
           MotionBundler::Require::Ripper::Builder.expects(:new).with("./app/controllers/foo_controller.rb").returns foo_builder
 
@@ -27,6 +28,10 @@ module Unit
           qux_builder = mock "object"
           qux_builder.expects(:requires).returns []
           MotionBundler::Require::Ripper::Builder.expects(:new).with("./app/controllers/qux.rb").returns qux_builder
+
+          bar_builder = mock "object"
+          bar_builder.expects(:requires).returns []
+          MotionBundler::Require::Ripper::Builder.expects(:new).with(File.expand_path("./app/controllers/bar.rb")).returns bar_builder
 
           MotionBundler::Require.expects(:resolve).with("stringio").returns("stdlib/stringio.rb")
           MotionBundler::Require.expects(:resolve).with("strscan").returns("mocks/strscan.rb")
@@ -44,7 +49,8 @@ module Unit
             "stdlib/stringio.rb",
             "mocks/strscan.rb",
             "./app/controllers/foo_controller.rb",
-            "lib/baz.rb"
+            "lib/baz.rb",
+            File.expand_path("app/controllers/bar.rb")
           ], ripper.files)
           assert_equal({
             "./app/controllers/app_controller.rb" => [
@@ -52,7 +58,8 @@ module Unit
               "mocks/strscan.rb"
             ],
             "./app/controllers/foo_controller.rb" => [
-              "lib/baz.rb"
+              "lib/baz.rb",
+              File.expand_path("app/controllers/bar.rb")
             ]
           }, ripper.files_dependencies)
           assert_equal({
@@ -63,6 +70,7 @@ module Unit
             "./app/controllers/foo_controller.rb" => %w(
               baz
               qux
+              bar
             )
           }, ripper.requires)
         end

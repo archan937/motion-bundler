@@ -43,9 +43,13 @@ module Unit
           assert_equal false, Kernel.respond_to?(:_ruby_require)
         end
 
-        it "should colorize messages" do
+        it "should be able to colorize messages" do
           string = "MESSAGE"
+
           assert_equal "\e[0;1982;49mMESSAGE\e[0m", string.send(:colorize, 1982)
+          assert_equal "\e[0;33;49mMESSAGE\e[0m", string.yellow
+          assert_equal "\e[0;32;49mMESSAGE\e[0m", string.green
+          assert_equal "\e[0;31;49mMESSAGE\e[0m", string.red
 
           string.expects(:colorize).with(33)
           string.yellow
