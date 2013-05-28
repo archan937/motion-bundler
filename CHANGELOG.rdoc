@@ -1,5 +1,9 @@
 = MotionBundler CHANGELOG
 
+== Version 0.1.3 (May 28, 2013)
+
+* Altered `simulator?` (and thus `device?`) determination (in simulator when ARGV is empty)
+
 == Version 0.1.2 (May 20, 2013)
 
 * Updated mocked HTTParty module:
