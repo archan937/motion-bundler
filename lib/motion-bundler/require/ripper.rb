@@ -1,3 +1,4 @@
+require "set"
 require "motion-bundler/require/ripper/builder"
 
 module MotionBundler
@@ -33,20 +34,28 @@ module MotionBundler
 
           builder = Builder.new source
           builder.requires.each do |method, args|
-            (@files_dependencies[source] ||= []) << begin
-              (method == :require_relative ? File.expand_path("../#{args[0]}.rb", source) : Require.resolve(args[0])).tap do |file|
-                @files << source
-                @files << file
-                unless @sources.any?{|x| File.expand_path(x) == File.expand_path(file)}
-                  if file.include?(File.expand_path("."))
-                    added_sources << file
-                  else
-                    MotionBundler.app_require file
-                  end
-                end
+            (@requires[source] ||= []) << args[0]
+
+            file = begin
+              if method == :require_relative
+                File.expand_path("../#{args[0]}.rb", source)
+              else
+                Require.resolve(args[0])
               end
             end
-            (@requires[source] ||= []) << args[0]
+
+            next if @sources.any?{|x| File.expand_path(x) == File.expand_path(file)}
+
+            if file.include?(File.expand_path("."))
+              added_sources << file
+            else
+              MotionBundler.app_require file
+            end
+
+            @files << source
+            @files << file
+
+            (@files_dependencies[source] ||= []) << file
           end
 
           unless added_sources.empty?

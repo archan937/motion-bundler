@@ -3,6 +3,7 @@
 == Version 0.1.3 (May 28, 2013)
 
 * Altered `simulator?` (and thus `device?`) determination (in simulator when ARGV is empty)
+* Fixed `duplicate symbol` error (caused when requiring a file within `Dir["app/**/*.rb"]`)
 
 == Version 0.1.2 (May 20, 2013)
 
