@@ -29,11 +29,11 @@ module MotionBundler
   end
 
   def simulator?
-    !device?
+    argv.empty?
   end
 
   def device?
-    argv.include? "device"
+    !simulator?
   end
 
   def boot_file
