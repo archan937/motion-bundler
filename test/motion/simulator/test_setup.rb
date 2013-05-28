@@ -17,8 +17,6 @@ module Motion
             SlotMachine
           end
 
-          colorize = "#{Bundler.load.specs.detect{|x| x.name == "colorize"}.full_gem_path}/lib/colorize.rb"
-
           Motion::Project::App.any_instance.expects(:files).returns %w(
             /Users/paulengel/foo.rb
             /Users/paulengel/bar.rb
@@ -28,7 +26,6 @@ module Motion
             MotionBundler::MOTION_BUNDLER_FILE,
             motion_bundler_file("motion-bundler/simulator/boot.rb"),
             motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
-            colorize,
             motion_bundler_file("motion-bundler/simulator/console.rb"),
             gem_path("slot_machine/lib/slot_machine.rb"),
             gem_path("slot_machine/lib/slot_machine/version.rb"),
@@ -47,7 +44,6 @@ module Motion
           Motion::Project::App.any_instance.expects(:files_dependencies).with(
             motion_bundler_file("motion-bundler/simulator/boot.rb") => [
               motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
-              colorize,
               motion_bundler_file("motion-bundler/simulator/console.rb")
             ],
             gem_path("slot_machine/lib/slot_machine.rb") => [

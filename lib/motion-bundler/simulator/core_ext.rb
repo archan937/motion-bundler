@@ -49,3 +49,19 @@ class Module
 end
 
 end
+
+class String
+  def yellow
+    colorize 33
+  end
+  def green
+    colorize 32
+  end
+  def red
+    colorize 31
+  end
+private
+  def colorize(color)
+    "\e[0;#{color};49m#{self}\e[0m"
+  end
+end

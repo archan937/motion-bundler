@@ -10,6 +10,7 @@ module Kernel
   def autoload(mod, filename)
   end
 end
+
 class Object
   def require(name)
   end
@@ -18,6 +19,7 @@ class Object
   def load(filename, wrap=false)
   end
 end
+
 class Module
   def autoload(mod, filename)
   end

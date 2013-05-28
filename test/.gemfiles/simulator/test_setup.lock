@@ -1,8 +1,7 @@
 PATH
   remote: /Users/paulengel/Sources/motion-bundler
   specs:
-    motion-bundler (0.1.2)
-      colorize
+    motion-bundler (0.1.3)
 
 PATH
   remote: /Users/paulengel/Sources/motion-bundler/test/gems/slot_machine
@@ -12,7 +11,6 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    colorize (0.5.8)
 
 PLATFORMS
   ruby

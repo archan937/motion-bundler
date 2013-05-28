@@ -1,7 +1,6 @@
 #!/usr/bin/env rake
 require "bundler/gem_tasks"
 require "rake/testtask"
-require "colorize"
 
 task :default => "test/unit"
 
@@ -16,11 +15,11 @@ task "test/motion" do
   if ENV["BUNDLE_GEMFILE"] == "foo"
     FileList["test/motion/**/test_*.rb"].each_with_index do |test_file, index|
       puts if index > 0 || ARGV.include?("test/unit")
-      puts "#{test_file}:\n".green
+      puts "\e[0;32;49m#{test_file}:\n\e[0m"
       test_file = File.expand_path test_file
       system "cd #{File.dirname test_file} && ruby #{File.basename test_file}"
     end
   else
-    puts "Please use `.rake` to run motion tests".red
+    puts "\e[0;31;49mPlease use `.rake` to run motion tests\e[0m"
   end
 end
