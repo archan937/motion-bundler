@@ -7,7 +7,8 @@ require "motion-bundler/version"
 module MotionBundler
   extend self
 
-  MOTION_BUNDLER_FILE = File.expand_path "./.motion-bundler.rb"
+  PROJECT_PATH = File.expand_path "."
+  MOTION_BUNDLER_FILE = "#{PROJECT_PATH}/.motion-bundler.rb"
 
   def app_require(file)
     app_requires << file
@@ -21,10 +22,14 @@ module MotionBundler
       ripper_require files, files_dependencies, required
       tracer_require files, files_dependencies, required, &block
 
-      app.files = files
-      app.files_dependencies files_dependencies
+      normalize! files
+      normalize! files_dependencies
+      required.sort!.uniq!
 
       write_motion_bundler files, files_dependencies, required
+
+      app.files = files
+      app.files_dependencies files_dependencies
     end
   end
 
@@ -57,11 +62,15 @@ private
   def ripper_require(files, files_dependencies, required)
     ripper = Require::Ripper.new *Dir["app/**/*.rb"].collect{|x| "./#{x}"}
 
-    files.replace(ripper.files + files).uniq!
-    files_dependencies.merge!(ripper.files_dependencies)
-
-    files_dependencies.each{|k, v| v.uniq!}
-    required.concat(ripper.requires.values.flatten).uniq!; required.sort!
+    files.replace(
+      ripper.files + files
+    )
+    files_dependencies.merge!(
+      ripper.files_dependencies
+    )
+    required.concat(
+      ripper.requires.values.flatten
+    )
   end
 
   def tracer_require(files, files_dependencies, required)
@@ -82,7 +91,7 @@ private
 
     files.replace(
       Require.files + files - ["APP", "BUNDLER", __FILE__]
-    ).uniq!
+    )
     files_dependencies.merge!(
       Require.files_dependencies.tap do |dependencies|
         (dependencies.delete("BUNDLER") || []).each do |file|
@@ -92,11 +101,9 @@ private
         dependencies.delete(__FILE__)
       end
     )
-
-    files_dependencies.each{|k, v| v.uniq!}
-    required.concat(Require.requires.values.flatten).uniq!; required.sort!
-
-    true
+    required.concat(
+      Require.requires.values.flatten
+    )
   end
 
   def write_motion_bundler(files, files_dependencies, required)
@@ -114,6 +121,24 @@ private
         end
       RUBY_CODE
     end
+  end
+
+  def normalize!(object)
+    object.replace(
+      if object.is_a?(Array)
+        object.inject(Set.new) do |a, v|
+          a << File.expand_path(v)
+          a
+        end.to_a.partition do |v|
+          (v == MOTION_BUNDLER_FILE) || !v.include?(PROJECT_PATH)
+        end.flatten
+      elsif object.is_a?(Hash)
+        object.inject({}) do |h, (k, v)|
+          (h[File.expand_path(k)] ||= []).concat normalize!(v)
+          h
+        end
+      end
+    )
   end
 
   def pretty_inspect(object, indent = 0)

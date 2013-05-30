@@ -1,7 +1,7 @@
 PATH
   remote: /Users/paulengel/Sources/motion-bundler
   specs:
-    motion-bundler (0.1.3)
+    motion-bundler (0.1.4)
 
 PATH
   remote: /Users/paulengel/Sources/motion-bundler/test/gems/slot_machine

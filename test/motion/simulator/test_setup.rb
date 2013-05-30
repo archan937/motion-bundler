@@ -22,7 +22,7 @@ module Motion
             /Users/paulengel/bar.rb
           )
 
-          Motion::Project::App.any_instance.expects(:files=).with([
+          Motion::Project::App.any_instance.expects(:files=).with(expand_paths [
             MotionBundler::MOTION_BUNDLER_FILE,
             motion_bundler_file("motion-bundler/simulator/boot.rb"),
             motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
@@ -41,7 +41,7 @@ module Motion
             "/Users/paulengel/bar.rb"
           ])
 
-          Motion::Project::App.any_instance.expects(:files_dependencies).with(
+          Motion::Project::App.any_instance.expects(:files_dependencies).with(expand_paths({
             motion_bundler_file("motion-bundler/simulator/boot.rb") => [
               motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
               motion_bundler_file("motion-bundler/simulator/console.rb")
@@ -56,7 +56,7 @@ module Motion
               gem_path("slot_machine/lib/time_slot.rb"),
               gem_path("slot_machine/lib/time_slots.rb")
             ]
-          )
+          }))
 
           MotionBundler.setup do |app|
             app.require "a"

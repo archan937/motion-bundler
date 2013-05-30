@@ -113,7 +113,7 @@ module Unit
             ]
           })
 
-          Motion::Project::App.any_instance.expects(:files=).with([
+          Motion::Project::App.any_instance.expects(:files=).with(expand_paths [
             motion_bundler_file("motion-bundler/simulator/boot.rb"),
             motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
             motion_bundler_file("motion-bundler/simulator/motion-bundler.rb"),
@@ -125,7 +125,7 @@ module Unit
             "controller.rb"
           ])
 
-          Motion::Project::App.any_instance.expects(:files_dependencies).with({
+          Motion::Project::App.any_instance.expects(:files_dependencies).with(expand_paths({
             motion_bundler_file("motion-bundler/simulator/boot.rb") => [
               motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
               motion_bundler_file("motion-bundler/simulator/motion-bundler.rb")
@@ -135,7 +135,7 @@ module Unit
               "gems/foo-0.1.0/lib/foo/bar.rb",
               "gems/foo-0.1.0/lib/foo/version.rb"
             ]
-          })
+          }))
 
           MotionBundler.setup
         end

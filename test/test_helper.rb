@@ -37,6 +37,17 @@ def mocks_dir
   File.expand_path "../mocks", __FILE__
 end
 
+def expand_paths(paths)
+  if paths.is_a? Array
+    paths.collect{|v| File.expand_path v}
+  else
+    paths.inject({}) do |h, (k, v)|
+      h[File.expand_path(k)] = expand_paths(v)
+      h
+    end
+  end
+end
+
 def motion_gemfile(content)
   content = "source \"https://rubygems.org\"\n\n#{content}"
   dirname = File.dirname __FILE__
