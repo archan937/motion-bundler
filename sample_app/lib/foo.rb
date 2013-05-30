@@ -1,5 +1,4 @@
 require_relative "foo/bar"
-require_relative './../app/controllers/app_controller'
 require "cgi"
 
 module Foo
