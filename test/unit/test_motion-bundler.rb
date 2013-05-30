@@ -58,6 +58,12 @@ module Unit
         MotionBundler.send :write_motion_bundler, [], {}, []
       end
 
+      it "should be able to register files to require" do
+        assert_equal [], MotionBundler.send(:app_requires)
+        MotionBundler.app_require "foo/bar.rb"
+        assert_equal ["foo/bar.rb"], MotionBundler.send(:app_requires)
+      end
+
       describe "calling `setup`" do
         it "should require the :motion Bundler group and trace requires" do
           object = mock "object"

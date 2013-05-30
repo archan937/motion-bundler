@@ -29,33 +29,36 @@ module MotionBundler
 
       def parse
         @sources.each do |source|
-          next if @files_dependencies.include?(source)
+          next if @requires.include?(source)
           added_sources = []
 
           builder = Builder.new source
           builder.requires.each do |method, args|
-            (@requires[source] ||= []) << args[0]
 
-            file = begin
-              if method == :require_relative
-                File.expand_path("../#{args[0]}.rb", source)
-              else
-                Require.resolve(args[0])
+            (@requires[source] ||= []) << args[0]
+            ((arg = args[0]).include?("*.rb") ? Dir[arg] : [arg]).each do |file|
+              file = begin
+                if method == :require_relative
+                  File.expand_path("../#{file}.rb", source)
+                else
+                  Require.resolve(file)
+                end
+              end
+
+              @files << source
+              @files << file
+
+              (@files_dependencies[source] ||= []) << file
+              expanded_path = File.expand_path(file)
+
+              unless @sources.any?{|x| File.expand_path(x) == expanded_path}
+                if expanded_path.include?(MotionBundler::PROJECT_PATH)
+                  added_sources << file
+                else
+                  MotionBundler.app_require file
+                end
               end
             end
-
-            next if @sources.any?{|x| File.expand_path(x) == File.expand_path(file)}
-
-            if file.include?(File.expand_path("."))
-              added_sources << file
-            else
-              MotionBundler.app_require file
-            end
-
-            @files << source
-            @files << file
-
-            (@files_dependencies[source] ||= []) << file
           end
 
           unless added_sources.empty?
