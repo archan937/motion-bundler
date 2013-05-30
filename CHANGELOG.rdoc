@@ -1,5 +1,12 @@
 = MotionBundler CHANGELOG
 
+== Version 0.1.5 (May 30, 2013)
+
+* Being able to require multiple files (e.g. `require "./config/**/*.rb"` within `app/app_delegate.rb`)
+* Expanding paths when registering files and files dependencies
+* Corrected files order when registering
+* Fixed `duplicate symbol` error (for real this time)
+
 == Version 0.1.4 (May 29, 2013)
 
 * Not using colorize as gem dependency anymore: defining String#yellow, String#green, String#red in MotionBundler itself
