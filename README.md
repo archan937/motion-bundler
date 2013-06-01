@@ -30,7 +30,7 @@ Add `MotionBundler.setup` at the end of your `Rakefile`:
 
     # -*- coding: utf-8 -*-
     $:.unshift "/Library/RubyMotion/lib"
-    require "motion/project"
+    require "motion/project/template/ios"
 
     # Require and prepare Bundler
     require "bundler"
