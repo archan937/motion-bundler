@@ -1,5 +1,5 @@
 module HTTParty
   def self.hi!
-    "Hi!"
+    "Hi, I'm #{name}"
   end
 end

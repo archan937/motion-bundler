@@ -2,6 +2,7 @@ require "stringio"
 require "strscan"
 require "zlib"
 require "httparty"
+require "net/pop"
 require_relative "../../lib/foo"
 
 class AppController < UIViewController
@@ -36,6 +37,10 @@ class AppController < UIViewController
 
     p HTTParty.hi!
 
+    # Testing (mocked) Net::Protocol
+
+    p Net::Protocol.hi!
+
     # Testing Foo and Foo::Bar
 
     p Foo.foo!
@@ -48,6 +53,16 @@ class AppController < UIViewController
     enc = Base64.encode64("Send reinforcements!")
     p enc
     p Base64.decode64(enc)
+
+    # Say thanks
+
+    alert = UIAlertView.new
+    alert.title = "Thanks!"
+    alert.message = "Hi, thanks for giving MotionBundler a try! Any form of collaboration is very welcome.\n\nGreets,\nPaul Engel\n@archan937"
+    alert.show
+
+    count = alert.message.split("\n").collect(&:size).max + 2
+    puts ["", "=" * count, "", alert.title, "", alert.message, "", "=" * count]
 
   end
 end
