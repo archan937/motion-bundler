@@ -2,7 +2,7 @@ module MotionBundler
   module Require
     module Resolve
 
-      def resolve(path, strict = false)
+      def resolve(path)
         base_path = path.gsub(/\.rb$/, "")
 
         load_paths.each do |load_path|
@@ -11,7 +11,7 @@ module MotionBundler
           end
         end
 
-        path unless strict
+        path
       end
 
     private

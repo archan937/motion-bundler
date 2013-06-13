@@ -36,7 +36,7 @@ module MotionBundler
                   false
                 end
                 unless result
-                  {:required => MotionBundler::Require.resolve(path, false)}
+                  {:required => MotionBundler::Require.resolve(path)}
                 end
               end
               result

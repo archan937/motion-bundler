@@ -15,7 +15,6 @@ module Unit
           MotionBundler::Require::Mocker.expects(:dirs).at_least_once.returns [
             MotionBundler::Require::Mocker::APP_MOCKS, mocks_dir, MotionBundler::Require::Mocker::GEM_MOCKS
           ]
-          assert_equal nil, Require.resolve("foo", true)
           assert_equal "foo", Require.resolve("foo")
           assert_equal "#{mocks_dir}/yaml.rb", Require.resolve("yaml")
           assert_equal "#{mocks_dir}/net/http.rb", Require.resolve("net/http")
