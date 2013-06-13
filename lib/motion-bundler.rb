@@ -74,7 +74,7 @@ private
   end
 
   def tracer_require(files, files_dependencies, required)
-    Require.trace do
+    Require.mock_and_trace do
       require MOTION_BUNDLER_FILE
       require boot_file
       Bundler.require :motion

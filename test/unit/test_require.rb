@@ -4,6 +4,23 @@ module Unit
   class TestRequire < MiniTest::Unit::TestCase
 
     describe MotionBundler::Require do
+      it "should be able to mock and trace requirements within a block" do
+        object = mock "object"
+        object.expects :do_something
+
+        MotionBundler::Require.mock_and_trace do
+          object.do_something
+        end
+
+        MotionBundler::Require::Tracer.expects :yield
+        MotionBundler::Require.mock_and_trace do
+        end
+
+        MotionBundler::Require::Mocker.expects :yield
+        MotionBundler::Require.mock_and_trace do
+        end
+      end
+
       it "should be able to trace requirements within a block" do
         object = mock "object"
         object.expects :do_something

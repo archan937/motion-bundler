@@ -65,7 +65,7 @@ module Unit
       end
 
       describe "calling `setup`" do
-        it "should require the :motion Bundler group and trace requires" do
+        it "should require the :motion Bundler group and mock and trace requires" do
           object = mock "object"
           object.expects :do_something
 
@@ -74,6 +74,9 @@ module Unit
             app.require "foo"
             object.do_something
           end
+
+          MotionBundler::Require.expects(:mock_and_trace)
+          MotionBundler.setup
 
           MotionBundler.expects(:touch_motion_bundler)
           MotionBundler.expects(:ripper_require)

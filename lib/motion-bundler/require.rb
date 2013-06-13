@@ -8,6 +8,14 @@ module MotionBundler
     include Resolve
     extend self
 
+    def mock_and_trace
+      mock do
+        trace do
+          yield
+        end
+      end
+    end
+
     def trace
       Tracer.yield do
         yield
