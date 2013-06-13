@@ -1,5 +1,10 @@
 = MotionBundler CHANGELOG
 
+== Version 0.1.6 (June 14, 2013)
+
+* Removed optional `strict` argument within Require.resolve
+* Also mocking within `MotionBundler.tracer_require` (thanks Li Jie for issuing, see https://github.com/archan937/motion-bundler/issues/7)
+
 == Version 0.1.5 (May 30, 2013)
 
 * Being able to require multiple files (e.g. `require "./config/**/*.rb"` within `app/app_delegate.rb`)
