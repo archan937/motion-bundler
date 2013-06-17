@@ -65,13 +65,17 @@ module Unit
       end
 
       describe "calling `setup`" do
+        before do
+          MotionBundler.send(:app_requires).clear
+        end
+
         it "should require the :motion Bundler group and mock and trace requires" do
           object = mock "object"
           object.expects :do_something
 
           Bundler.expects(:require).with(:motion)
           MotionBundler.setup do |app|
-            app.require "foo"
+            app.require lib_file("e")
             object.do_something
           end
 
@@ -122,7 +126,7 @@ module Unit
             ]
           })
 
-          Motion::Project::App.any_instance.expects(:files=).with(expand_paths [
+          Motion::Project::App.any_instance.expects(:files=).with(expand_paths([
             motion_bundler_file("motion-bundler/simulator/boot.rb"),
             motion_bundler_file("motion-bundler/simulator/core_ext.rb"),
             motion_bundler_file("motion-bundler/simulator/motion-bundler.rb"),
@@ -132,7 +136,7 @@ module Unit
             "ruby/foo.rb",
             "delegate.rb",
             "controller.rb"
-          ])
+          ]))
 
           Motion::Project::App.any_instance.expects(:files_dependencies).with(expand_paths({
             motion_bundler_file("motion-bundler/simulator/boot.rb") => [

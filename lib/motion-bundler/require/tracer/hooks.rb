@@ -30,14 +30,7 @@ module MotionBundler
             def require_with_mb_trace(path, _caller = nil, _path = nil)
               result = nil
               MotionBundler::Require::Tracer.log.register(_caller || caller[0], _path || path) do
-                result = begin
-                  require_without_mb_trace path
-                rescue LoadError => e
-                  false
-                end
-                unless result
-                  {:required => MotionBundler::Require.resolve(path)}
-                end
+                result = require_without_mb_trace path
               end
               result
             end

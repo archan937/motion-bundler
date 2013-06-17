@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require "motion-bundler/cli"
+
+begin
+  MotionBundler::CLI.start
+rescue MotionBundler::CLI::Error => e
+  puts "\e[0;#{31};49m#{e.message}\e[0m"
+end

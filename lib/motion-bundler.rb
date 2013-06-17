@@ -60,7 +60,7 @@ private
   end
 
   def ripper_require(files, files_dependencies, required)
-    ripper = Require::Ripper.new *Dir["app/**/*.rb"].collect{|x| "./#{x}"}
+    ripper = Require::Ripper.new Dir["app/**/*.rb"].collect{|x| "./#{x}"}
 
     files.replace(
       ripper.files + files
@@ -78,10 +78,7 @@ private
       require MOTION_BUNDLER_FILE
       require boot_file
       Bundler.require :motion
-      app_requires.delete_if do |file|
-        require file, "APP"
-        true
-      end
+      app_requires.delete_if{|file| require file, "APP"; true}
       if block_given?
         config = Config.new
         yield config

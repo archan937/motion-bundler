@@ -39,7 +39,7 @@ module Unit
                 loaded_features << "file2"
               end
               @log.register "/Sources/lib/foo.rb:12", "qux" do
-                {:required => false}
+                false
               end
               loaded_features << "file1"
             end
@@ -77,6 +77,41 @@ module Unit
               "/Sources/lib/file2.rb:1" => %w(file3),
               "/Sources/lib/file2.rb:2" => %w(file4),
               "/Sources/lib/foo.rb:12" => %w(qux)
+            }, @log.requires)
+          end
+
+          it "should be able to trace files that are already loaded" do
+            self.expects(:require_without_mb_trace).with("cgi").returns(false)
+            MotionBundler::Require::Tracer.log.expects(:merge!)
+            MotionBundler::Require.mock_and_trace do
+              require "cgi", "APP"
+            end
+
+            $CLI = true
+            self.expects(:require_without_mb_trace).with("cgi").returns(false)
+            File.expects(:read).with("cgi").returns("")
+            MotionBundler::Require::Tracer.log.expects(:merge!)
+            MotionBundler::Require.mock_and_trace do
+              require "cgi", "APP"
+            end
+            $CLI = false
+          end
+
+          it "should be able to merge files, files dependencies and requires" do
+            @log.instance_variable_set :@files, Set.new(%w(a b))
+            @log.instance_variable_set :@files_dependencies, {"c" => %w(d e)}
+            @log.instance_variable_set :@requires, {"f" => %w(g)}
+
+            @log.merge! %w(h i), {"c" => %w(j), "k" => %w(l m)}, {"f" => %w(n), "o" => %w(p q)}
+
+            assert_equal(%w(a b h i), @log.files)
+            assert_equal({
+              "c" => %w(d e j),
+              "k" => %w(l m)
+            }, @log.files_dependencies)
+            assert_equal({
+              "f" => %w(g n),
+              "o" => %w(p q)
             }, @log.requires)
           end
         end

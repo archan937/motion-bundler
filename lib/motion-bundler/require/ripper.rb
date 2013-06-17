@@ -5,8 +5,9 @@ module MotionBundler
   module Require
     class Ripper
 
-      def initialize(*sources)
+      def initialize(sources, scope = MotionBundler::PROJECT_PATH)
         @sources = sources
+        @scope = scope
         @files = Set.new
         @files_dependencies = {}
         @requires = {}
@@ -41,7 +42,7 @@ module MotionBundler
                 if method == :require_relative
                   File.expand_path("../#{file}.rb", source)
                 else
-                  Require.resolve(file)
+                  Require.resolve(file, false)
                 end
               end
 
@@ -52,7 +53,7 @@ module MotionBundler
               expanded_path = File.expand_path(file)
 
               unless @sources.any?{|x| File.expand_path(x) == expanded_path}
-                if expanded_path.include?(MotionBundler::PROJECT_PATH)
+                if expanded_path.match(/^#{@scope}/)
                   added_sources << file
                 else
                   MotionBundler.app_require file

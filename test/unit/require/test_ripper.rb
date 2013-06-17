@@ -41,18 +41,18 @@ module Unit
           lib_baz_builder.expects(:requires).returns []
           MotionBundler::Require::Ripper::Builder.expects(:new).with("lib/baz.rb").returns lib_baz_builder
 
-          MotionBundler::Require.expects(:resolve).with("stringio").returns("/stdlib/stringio.rb")
-          MotionBundler::Require.expects(:resolve).with("strscan").returns("mocks/strscan.rb")
-          MotionBundler::Require.expects(:resolve).with("baz").returns("lib/baz.rb")
+          MotionBundler::Require.expects(:resolve).with("stringio", false).returns("/stdlib/stringio.rb")
+          MotionBundler::Require.expects(:resolve).with("strscan", false).returns("mocks/strscan.rb")
+          MotionBundler::Require.expects(:resolve).with("baz", false).returns("lib/baz.rb")
 
           MotionBundler.expects(:app_require).with("/stdlib/stringio.rb")
 
-          ripper = MotionBundler::Require::Ripper.new(
+          ripper = MotionBundler::Require::Ripper.new([
             "./app/controllers/app_controller.rb",
             "./app/controllers/foo_controller.rb",
             "./app/controllers/baz_controller.rb",
             "./app/controllers/qux.rb"
-          )
+          ])
 
           assert_equal([
             "./app/controllers/app_controller.rb",

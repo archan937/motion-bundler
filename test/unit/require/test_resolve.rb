@@ -22,6 +22,12 @@ module Unit
           assert_equal "#{mocks_dir}/psych_foo-0.1.0/psych/handler.rb", Require.resolve("psych/handler")
           assert_equal "#{mocks_dir}/psych_foo-0.1.0/psych/handler.rb", Require.resolve("psych/handler")
           assert_equal "#{MotionBundler::Require::Mocker::GEM_MOCKS}/httparty.rb", Require.resolve("httparty")
+
+          require "cgi"
+          cgi = $LOADED_FEATURES.detect{|x| x.include? "/cgi.rb"}
+
+          assert_equal "cgi", Require.resolve("cgi")
+          assert_equal cgi, Require.resolve("cgi", false)
         end
 
       end

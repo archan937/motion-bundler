@@ -2,6 +2,7 @@ PATH
   remote: /Users/paulengel/Sources/motion-bundler
   specs:
     motion-bundler (0.1.6)
+      thor
 
 PATH
   remote: /Users/paulengel/Sources/motion-bundler/test/gems/slot_machine
@@ -11,6 +12,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    thor (0.18.1)
 
 PLATFORMS
   ruby

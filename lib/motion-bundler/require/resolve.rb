@@ -2,10 +2,10 @@ module MotionBundler
   module Require
     module Resolve
 
-      def resolve(path)
+      def resolve(path, only_mocks = true)
         base_path = path.gsub(/\.rb$/, "")
 
-        load_paths.each do |load_path|
+        load_paths(only_mocks).each do |load_path|
           if (file = Dir["#{load_path}/#{base_path}.rb"].first)
             return file
           end
@@ -16,8 +16,10 @@ module MotionBundler
 
     private
 
-      def load_paths
-        Mocker.dirs + Mocker.dirs.collect_concat{|x| Dir["#{x}/*"]} + $LOAD_PATH + gem_paths
+      def load_paths(only_mocks)
+        (Mocker.dirs + Mocker.dirs.collect_concat{|x| Dir["#{x}/*"]}).tap do |load_paths|
+          load_paths.concat($LOAD_PATH + gem_paths) unless only_mocks
+        end
       end
 
       class GemPath
