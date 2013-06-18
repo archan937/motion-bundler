@@ -4,6 +4,7 @@ require "zlib"
 require "httparty"
 require "net/pop"
 require_relative "../../lib/foo"
+require "socket"
 
 class AppController < UIViewController
   def viewDidLoad

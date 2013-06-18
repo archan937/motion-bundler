@@ -11,6 +11,8 @@ Motion::Project::App.setup do |app|
   app.name = "MBundler"
 end
 
+require "/Users/paulengel/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/cgi/html.rb"
+
 # Track and specify files and their mutual dependencies within the :motion Bundler group
 MotionBundler.setup do |app|
   app.require "base64"
