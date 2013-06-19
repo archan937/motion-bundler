@@ -5,7 +5,7 @@ module MotionBundler
       class Warning
         def print
           if require_statement = [:require, :require_relative, :load, :autoload].include?(@method)
-            return if MotionBundler::REQUIRED.include? @args.last
+            return if MotionBundler::REQUIRES.include? @args.last
           end
 
           warning = "Warning Called `#{[@object, @method].compact.join "."}"

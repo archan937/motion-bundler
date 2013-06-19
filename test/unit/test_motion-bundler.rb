@@ -46,7 +46,7 @@ module Unit
                 "qux"
               ]
             }
-            REQUIRED = [
+            REQUIRES = [
               "fu",
               "baz"
             ]

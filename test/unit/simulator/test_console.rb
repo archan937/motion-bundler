@@ -7,12 +7,12 @@ module Unit
 
       describe MotionBundler::Simulator::Console do
         before do
-          MotionBundler.send :remove_const, :REQUIRED if defined?(MotionBundler::REQUIRED)
-          MotionBundler::REQUIRED = ["baz"]
+          MotionBundler.send :remove_const, :REQUIRES if defined?(MotionBundler::REQUIRES)
+          MotionBundler::REQUIRES = ["baz"]
         end
 
         after do
-          MotionBundler.send :remove_const, :REQUIRED
+          MotionBundler.send :remove_const, :REQUIRES
         end
 
         it "should print warnings as expected" do
