@@ -1,5 +1,16 @@
 = MotionBundler CHANGELOG
 
+== Version 0.1.7 (June 19, 2013)
+
+* Added MotionBundler::CLI which outputs files, files dependencies and requires as YAML (usage: `bundle exec motion-bundler trace cgi`)
+* Only resolving paths within $LOAD_PATH and gems paths when explicitly requested (only resolving mocks at default)
+* Being able to pass a "scope path" to Ripper.new which determines whether to immediately "rip" an analyzed Ruby source file
+* Being able to trace files which are already required (thanks Geoff Ereth for issuing)
+* Not rescuing LoadError when hooking into the `require` method
+* Renamed REQUIRED to REQUIRES
+* Corrected merging ripper with tracer files dependencies
+* Introduced app.register in case of correcting missing require statements e.g. in REXML (thanks Jeff Enderwick @jeff7091 for issuing)
+
 == Version 0.1.6 (June 14, 2013)
 
 * Removed optional `strict` argument within Require.resolve
