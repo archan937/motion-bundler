@@ -72,30 +72,37 @@ private
   end
 
   def tracer_require(files, files_dependencies, requires)
+    config = Config.new
+    if block_given?
+      yield config
+    end
+
     Require.mock_and_trace do
       require MOTION_BUNDLER_FILE
       require boot_file
       Bundler.require :motion
-      app_requires.delete_if{|file| require file, "APP"; true}
-      if block_given?
-        config = Config.new
-        yield config
-        config.requires.each{|file| require file, "APP"}
-      end
+      app_requires.each{|file| require file, "APP"}
+      config.requires.each{|file| require file, "APP"}
     end
 
     files.replace(
-      Require.files + files - ["APP", "BUNDLER", __FILE__]
+      Require.files + config.files + files - ["APP", "BUNDLER", __FILE__]
     )
+
     Require.files_dependencies.tap do |dependencies|
       (dependencies.delete("BUNDLER") || []).each do |file|
         (dependencies[file] ||= []).unshift boot_file
       end
       dependencies.delete("APP")
       dependencies.delete(__FILE__)
-    end.each{|file, paths| (files_dependencies[file] ||= []).concat paths}
+    end.each do |file, paths|
+      (files_dependencies[file] ||= []).concat paths
+    end
+
+    config.files_dependencies.each{|file, paths| (files_dependencies[file] ||= []).concat paths}
+
     requires.concat(
-      Require.requires.values.flatten
+      Require.requires.values.flatten + config.requires
     )
   end
 

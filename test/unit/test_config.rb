@@ -11,8 +11,19 @@ module Unit
         config.require "foo"
         config.require "foo/baz"
         assert_equal %w(foo foo/baz), config.requires
-
         assert config.requires.object_id != config.requires.object_id
+
+        cgi = MotionBundler::Require.resolve "cgi", false
+        html = MotionBundler::Require.resolve "cgi/html", false
+
+        config.register({"cgi" => ["cgi/html"]})
+        assert_equal([cgi, html], config.files)
+        assert_equal({cgi => [html]}, config.files_dependencies)
+
+        cookie = MotionBundler::Require.resolve "cgi/cookie", false
+
+        config.instance_variable_get(:@files_dependencies)[cgi].expects(:concat).with([cookie])
+        config.register({"cgi" => ["cgi/cookie"]})
       end
     end
 
