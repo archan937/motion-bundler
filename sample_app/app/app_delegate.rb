@@ -1,3 +1,7 @@
+module REXML
+  class Child; end
+end
+
 class AppDelegate
   def application(application, didFinishLaunchingWithOptions:launchOptions)
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)

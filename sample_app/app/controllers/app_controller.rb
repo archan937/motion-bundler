@@ -3,8 +3,10 @@ require "strscan"
 require "zlib"
 require "httparty"
 require "net/pop"
-require_relative "../../lib/foo"
+require "rexml/document"
 require "socket"
+
+require_relative "../../lib/foo"
 
 class AppController < UIViewController
   def viewDidLoad
@@ -54,6 +56,58 @@ class AppController < UIViewController
     enc = Base64.encode64("Send reinforcements!")
     p enc
     p Base64.decode64(enc)
+
+    # Testing REXML::Document
+
+    xml = <<-XML
+      <inventory title="OmniCorp Store #45x10^3">
+        <section name="health">
+          <item upc="123456789" stock="12">
+            <name>Invisibility Cream</name>
+            <price>14.50</price>
+            <description>Makes you invisible</description>
+          </item>
+          <item upc="445322344" stock="18">
+            <name>Levitation Salve</name>
+            <price>23.99</price>
+            <description>Levitate yourself for up to 3 hours per application</description>
+          </item>
+        </section>
+        <section name="food">
+          <item upc="485672034" stock="653">
+            <name>Blork and Freen Instameal</name>
+            <price>4.95</price>
+            <description>A tasty meal in a tablet; just add water</description>
+          </item>
+          <item upc="132957764" stock="44">
+            <name>Grob winglets</name>
+            <price>3.56</price>
+            <description>Tender winglets of Grob. Just add water</description>
+          </item>
+        </section>
+      </inventory>
+    XML
+
+    doc = REXML::Document.new xml
+    root = doc.root
+
+    doc.elements.each("inventory/section"){|element| puts element.attributes["name"]}
+    # => health
+    # => food
+    doc.elements.each("*/section/item"){|element| puts element.attributes["upc"]}
+    # => 123456789
+    # => 445322344
+    # => 485672034
+    # => 132957764
+
+    puts root.attributes["title"]
+    # => OmniCorp Store #45x10^3
+    puts root.elements["section/item[@stock='44']"].attributes["upc"]
+    # => 132957764
+    puts root.elements["section"].attributes["name"]
+    # => health (returns the first encountered matching element)
+    puts root.elements[1].attributes["name"]
+    # => health (returns the FIRST child element)
 
     # Say thanks
 
