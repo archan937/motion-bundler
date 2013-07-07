@@ -5,7 +5,7 @@ module Kernel
   end
   def require_relative(string)
   end
-  def load(filename, wrap=false)
+  def load(*args)
   end
   def autoload(mod, filename)
   end
@@ -16,7 +16,7 @@ class Object
   end
   def require_relative(string)
   end
-  def load(filename, wrap=false)
+  def load(*args)
   end
 end
 

@@ -13,8 +13,8 @@ class Object
   def require_relative(string)
     console.warn { require_relative string }
   end
-  def load(filename, wrap=false)
-    console.warn { load filename }
+  def load(*args)
+    console.warn { load args[0] }
   end
   alias :original_instance_eval :instance_eval
   def instance_eval(*args, &block)
