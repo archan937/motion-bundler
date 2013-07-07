@@ -1,0 +1,26 @@
+# -*- coding: utf-8 -*-
+$:.unshift "/Library/RubyMotion/lib"
+require "motion/project/template/osx"
+
+# Require and prepare Bundler
+require "bundler"
+Bundler.require
+
+Motion::Project::App.setup do |app|
+  # Use `rake config' to see complete project settings.
+  app.name = "MBundler"
+  app.icon = "Icon"
+  app.info_plist["CFBundleIconFile"] = "Icon.icns"
+end
+
+require "/Users/paulengel/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/cgi/html.rb"
+
+# Track and specify files and their mutual dependencies within the :motion Bundler group
+MotionBundler.setup do |app|
+  app.require "base64"
+  app.register({
+    "rexml/xmldecl" => ["rexml/child"],
+    "rexml/doctype" => ["rexml/child"],
+    "rexml/parsers/baseparser" => ["set"]
+  })
+end

@@ -114,10 +114,11 @@ class AppController < UIViewController
     alert = UIAlertView.new
     alert.title = "Thanks!"
     alert.message = "Hi, thanks for giving MotionBundler a try! Any form of collaboration is very welcome.\n\nGreets,\nPaul Engel\n@archan937"
-    alert.show
 
     count = alert.message.split("\n").collect(&:size).max + 2
     puts ["", "=" * count, "", alert.title, "", alert.message, "", "=" * count]
+
+    alert.show
 
   end
 end

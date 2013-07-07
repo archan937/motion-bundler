@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
 # RubyMotion aware gems
-gem "motion-bundler", :path => File.expand_path("../..", __FILE__)
+gem "motion-bundler", :path => "../../.."
 
 # RubyMotion unaware gems
 group :motion do
