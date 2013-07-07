@@ -3,6 +3,10 @@ module MotionBundler
     def initialize
       @requires = []
       @files_dependencies = {}
+      register "app/app_delegate.rb" => ["boot.rb"] if boot_file?
+    end
+    def boot_file?
+      File.exists? "boot.rb"
     end
     def require(name)
       @requires << name

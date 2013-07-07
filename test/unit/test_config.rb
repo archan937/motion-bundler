@@ -4,6 +4,12 @@ module Unit
   class TestConfig < MiniTest::Unit::TestCase
 
     describe MotionBundler::Config do
+      it "should include 'boot.rb' when existing" do
+        assert_equal({}, MotionBundler::Config.new.files_dependencies)
+        MotionBundler::Config.any_instance.expects(:boot_file?).returns true
+        assert_equal({"app/app_delegate.rb" => ["boot.rb"]}, MotionBundler::Config.new.files_dependencies)
+      end
+
       it "should be able to register requires and returning them" do
         config = MotionBundler::Config.new
         assert_equal [], config.requires
