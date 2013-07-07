@@ -1,5 +1,10 @@
 = MotionBundler CHANGELOG
 
+== Version 0.2.0 (July 7, 2013)
+
+* Added (RubyMotion) OSX support
+* Making app/app_delegate.rb dependent of boot.rb when existing
+
 == Version 0.1.7 (June 19, 2013)
 
 * Added MotionBundler::CLI which outputs files, files dependencies and requires as YAML (usage: `bundle exec motion-bundler trace cgi`)
