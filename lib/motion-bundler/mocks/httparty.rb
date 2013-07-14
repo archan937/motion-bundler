@@ -41,7 +41,7 @@ private
     method = method.to_s.upcase
 
     if options[:body]
-      payload = payload_to_query_string(options[:body]).dataUsingEncoding(NSUTF8StringEncoding) if POST / PUT && payload
+      payload = payload_to_query_string(options[:body]).dataUsingEncoding(NSUTF8StringEncoding) if %w(POST PUT).include?(method) && payload
     end
 
     if payload && method == "GET"
