@@ -57,6 +57,12 @@ private
       request.HTTPMethod = method
     end
 
+    if options[:headers]
+      options[:headers].each do |key, value|
+        request.setValue value.to_s, forHTTPHeaderField: key.to_s
+      end
+    end
+
     if payload
       request.HTTPBody = payload
     end
