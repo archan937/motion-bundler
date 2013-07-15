@@ -1,7 +1,7 @@
 PATH
   remote: /Users/paulengel/Sources/motion-bundler
   specs:
-    motion-bundler (0.2.0)
+    motion-bundler (0.2.1)
       thor
 
 PATH

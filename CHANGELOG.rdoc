@@ -1,5 +1,10 @@
 = MotionBundler CHANGELOG
 
+== Version 0.2.1 (July 15, 2013)
+
+* Being able to pass options[:headers] to HTTParty
+* Corrected handling options[:body] within HTTParty
+
 == Version 0.2.0 (July 7, 2013)
 
 * Added (RubyMotion) OSX support
